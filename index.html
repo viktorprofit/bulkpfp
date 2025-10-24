@@ -1,1 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Bulk PFP Customizer</title>
+  <style>
+    /* ========== THEME (Bulk – Dark) ========== */
+    :root{
+      --bulk-base:#141310;           /* майже чорний */
+      --bg-primary:#1B1A14;          /* основний фон */
+      --bg-secondary:#544A4C;        /* вторинні панелі */
+      --text-primary:#FFFBEF;        /* кремово-білий */
+      --text-secondary:#C6B6BA;      /* м’якший текст */
+      --accent:#FFB547;              /* акцент (higlight) */
+      --line:rgba(255,255,255,.06);  /* лінії/бордери в темі */
+      --glow:rgba(255,181,71,.35);   /* сяйво акценту */
+    }
+
+    /* ========== BASE ========== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text-primary);
+      background:radial-gradient(1200px 800px at 20% -10%, rgba(255,181,71,.08), transparent 45%),
+                 radial-gradient(1000px 700px at 110% 120%, rgba(255,181,71,.05), transparent 45%),
+                 linear-gradient(180deg, var(--bulk-base), var(--bg-primary));
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:28px auto;
+      padding:0 16px;
+      display:grid;
+      gap:20px;
+      grid-template-columns:1fr;
+    }
+    @media(min-width:1100px){ .wrap{ grid-template-columns:1.2fr .9fr } }
+
+    /* ========== STAGE / CANVAS ========== */
+    .stage{
+      position:relative;
+      background:linear-gradient(180deg, rgba(20,19,16,.85), rgba(18,18,16,.85));
+      backdrop-filter: blur(4px);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.55);
+      display:flex;align-items:center;justify-content:center;
+    }
+    /* тонкий подвійний контур */
+    .stage::before{content:"";position:absolute;inset:10px;border-radius:12px;border:1px solid rgba(255,255,255,.06);pointer-events:none}
+    .stage::after {content:"";position:absolute;inset:16px;border-radius:10px;border:1px dashed rgba(255,255,255,.06);pointer-events:none}
+
+    canvas{
+      width:86%; /* трохи компактніше */
+      background:#0f0f0e;
+      border:1px dashed rgba(255,255,255,.08);
+      border-radius:12px;
+      display:block;
+    }
+
+    /* ========== PANELS / TYPO ========== */
+    .panel{
+      background:linear-gradient(180deg, rgba(27,26,20,.92), rgba(24,23,18,.92));
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.35);
+    }
+    .panel + .panel{ margin-top:10px }
+    .title{
+      display:flex;align-items:center;gap:10px;
+      font-weight:700; font-size:18px; letter-spacing:.02em;
+      color:var(--text-primary);
+    }
+    .dot{ width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 4px rgba(255,181,71,.18) }
+    .muted{ color:var(--text-secondary); font-size:12px; letter-spacing:.01em }
+
+    /* ========== BUTTONS ========== */
+    .btn{
+      appearance:none; width:100%;
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      background: #2a2627; color:var(--text-primary);
+      border:1px solid var(--line); border-radius:12px;
+      padding:14px 16px; cursor:pointer;
+      font-weight:700; letter-spacing:.03em;
+      transition: transform .08s ease, box-shadow .25s ease, background .25s ease, filter .25s ease;
+    }
+    .btn:hover{ box-shadow:0 8px 24px rgba(0,0,0,.35) inset, 0 0 0 1px rgba(255,255,255,.06) }
+    .btn:active{ transform: translateY(1px) }
+
+    .btn.primary{
+      background: linear-gradient(90deg, #FFB547, #FFBD63);
+      color:#1B1A14; border:0;
+      box-shadow: 0 6px 20px var(--glow);
+    }
+    .btn.primary:hover{
+      filter: brightness(1.03);
+      box-shadow: 0 10px 28px var(--glow), 0 0 0 1px rgba(255,181,71,.28) inset;
+    }
+
+    /* ========== THUMBS ========== */
+    .thumbs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px }
+    .thumb{
+      background:#1f1e1a; border:1px solid var(--line); border-radius:12px;
+      min-height:78px; display:flex;align-items:center;justify-content:center;
+      cursor:pointer; transition: border-color .25s, box-shadow .25s, background .25s;
+    }
+    .thumb img{ max-width:88%; object-fit:contain }
+    .thumb:hover{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(255,181,71,.25) inset, 0 0 16px var(--glow) }
+    .thumb.active{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(255,181,71,.38) inset, 0 0 22px var(--glow) }
+
+    /* ========== CONTROLS ========== */
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px }
+    label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px }
+    input[type="range"]{ width:100%; accent-color:var(--accent) }
+    .bar{ display:flex; gap:10px; margin-top:12px }
+    select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:var(--text-primary); border:1px solid var(--line) }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <!-- Preview -->
+    <section class="stage" aria-label="Preview Stage">
+      <canvas id="c" width="900" height="900"></canvas>
+    </section>
+
+    <!-- Controls -->
+    <section>
+      <div class="panel">
+        <div class="title"><span class="dot"></span> Upload PFP</div>
+        <p class="muted" style="margin:8px 0 12px">PNG / JPG / WEBP — processed locally in your browser.</p>
+        <input id="photo" type="file" accept="image/png,image/jpeg,image/webp" style="display:none"/>
+        <button id="pickPhoto" class="btn primary">⬆ Select Image</button>
+      </div>
+
+      <div class="panel">
+        <div class="title"><span class="dot"></span> Select Item</div>
+        <div class="thumbs" id="thumbs">
+          <button class="thumb" data-mask="cap1" title="Cap A"><img src="items/cap-a.png" alt="Cap A"></button>
+          <button class="thumb" data-mask="cap2" title="Cap B"><img src="items/cap-b.png" alt="Cap B"></button>
+          <button class="thumb" data-mask="bucket" title="Bucket Hat"><img src="items/bucket-hat.png" alt="Bucket Hat"></button>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="scale">Scale</label>
+            <input id="scale" type="range" min="0.2" max="3" value="1" step="0.01">
+          </div>
+          <div>
+            <label for="rotate">Rotate (°)</label>
+            <input id="rotate" type="range" min="-180" max="180" value="0" step="1">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="opacity">Opacity</label>
+            <input id="opacity" type="range" min="0" max="1" value="1" step="0.01">
+          </div>
+          <div>
+            <label for="exportSize">Export Size</label>
+            <select id="exportSize">
+              <option value="orig">Original</option>
+              <option value="512">512 × 512</option>
+              <option value="1024">1024 × 1024</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bar">
+          <button id="download" class="btn primary">⬇ Download PNG</button>
+          <button id="reset" class="btn">↻ Reset</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // DOM
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    const photoInput = document.getElementById('photo');
+    const pickPhotoBtn = document.getElementById('pickPhoto');
+    const thumbs = document.getElementById('thumbs');
+    const scaleInput = document.getElementById('scale');
+    const rotateInput = document.getElementById('rotate');
+    const opacityInput = document.getElementById('opacity');
+    const exportSizeSel = document.getElementById('exportSize');
+    const resetBtn = document.getElementById('reset');
+    const dlBtn = document.getElementById('download');
+
+    // State
+    const state = { bgImg:null, capImg:null, cap:{x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1} };
+
+    // Items (keep the same filenames)
+    const itemPaths = {
+      cap1:'items/cap-a.png',
+      cap2:'items/cap-b.png',
+      bucket:'items/bucket-hat.png'
+    };
+    const presets = {};
+    Object.entries(itemPaths).forEach(([k,src])=>{
+      const i=new Image(); i.src=src; presets[k]=i;
+    });
+
+    // Utils
+    function loadImageFromFile(file){
+      return new Promise((resolve, reject)=>{
+        const r=new FileReader();
+        r.onload=()=>{
+          const img=new Image();
+          img.onload=()=>resolve(img);
+          img.onerror=()=>reject(new Error('decode failed'));
+          img.src=r.result;
+        };
+        r.onerror=()=>reject(new Error('read failed'));
+        r.readAsDataURL(file);
+      });
+    }
+    function fitCanvasToImage(img){
+      const MAX=1400; let w=img.naturalWidth, h=img.naturalHeight;
+      const k=Math.min(1, MAX/Math.max(w,h));
+      canvas.width=Math.round(w*k); canvas.height=Math.round(h*k);
+    }
+    function centerCap(imgLike){
+      const iw=imgLike.width||imgLike.naturalWidth;
+      const ih=imgLike.height||imgLike.naturalHeight;
+      state.cap.w=iw; state.cap.h=ih;
+      state.cap.scale=Math.min(1, canvas.width/iw*0.5);
+      state.cap.rot=0;
+      state.cap.x=canvas.width/2-(iw*state.cap.scale)/2;
+      state.cap.y=canvas.height*0.2;
+      scaleInput.value=String(state.cap.scale);
+      rotateInput.value=String(state.cap.rot);
+    }
+    function render(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      if(state.bgImg) ctx.drawImage(state.bgImg,0,0,canvas.width,canvas.height);
+      else { ctx.fillStyle='#0f0f0e'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+
+      if(state.capImg){
+        const {x,y,w,h,scale,rot,alpha}=state.cap;
+        const cw=w*scale, ch=h*scale;
+        const cx=x+cw/2, cy=y+ch/2;
+        ctx.save();
+        ctx.translate(cx,cy);
+        ctx.rotate(rot*Math.PI/180);
+        ctx.globalAlpha=alpha;
+        ctx.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
+        ctx.restore();
+        ctx.globalAlpha=1;
+      }
+    }
+
+    // Events
+    pickPhotoBtn.addEventListener('click', ()=> photoInput.click());
+    photoInput.addEventListener('change', async ()=>{
+      const f=photoInput.files?.[0]; if(!f) return;
+      try{
+        if(!(f.type ? f.type.startsWith('image/') : /\.(png|jpe?g|webp)$/i.test(f.name||''))){
+          alert('Please upload an image (PNG, JPG, or WebP).'); return;
+        }
+        const img = await loadImageFromFile(f);
+        state.bgImg = img;
+        fitCanvasToImage(img);
+        render();
+      }catch(err){ alert('Could not load image.'); }
+    });
+
+    thumbs.addEventListener('click', e=>{
+      const box = e.target.closest('.thumb'); if(!box) return;
+      const key = box.getAttribute('data-mask'); if(!key) return;
+      state.capImg = presets[key];
+      centerCap(state.capImg);
+      document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+      box.classList.add('active');
+      render();
+    });
+
+    scaleInput.addEventListener('input', ()=>{ state.cap.scale=parseFloat(scaleInput.value||'1'); render(); });
+    rotateInput.addEventListener('input', ()=>{ state.cap.rot=parseFloat(rotateInput.value||'0'); render(); });
+    opacityInput.addEventListener('input', ()=>{ state.cap.alpha=parseFloat(opacityInput.value||'1'); render(); });
+
+    resetBtn.addEventListener('click', ()=>{
+      state.capImg = null;
+      document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+      render();
+    });
+
+    dlBtn.addEventListener('click', ()=>{
+      const opt = exportSizeSel.value;
+      if(opt==='orig'){
+        const a=document.createElement('a');
+        a.download='pfp.png';
+        a.href=canvas.toDataURL('image/png');
+        a.click(); return;
+      }
+      const size=parseInt(opt,10);
+      const off=document.createElement('canvas'); off.width=size; off.height=size;
+      const g=off.getContext('2d');
+
+      if(state.bgImg) g.drawImage(state.bgImg,0,0,size,size);
+      else { g.fillStyle='#0f0f0e'; g.fillRect(0,0,size,size); }
+
+      if(state.capImg){
+        const k = Math.min(size/canvas.width, size/canvas.height);
+        const {x,y,w,h,scale,rot,alpha}=state.cap;
+        const cw=w*scale*k, ch=h*scale*k;
+        const cx=(x*k)+cw/2, cy=(y*k)+ch/2;
+        g.save(); g.translate(cx,cy); g.rotate(rot*Math.PI/180); g.globalAlpha=alpha;
+        g.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
+        g.restore(); g.globalAlpha=1;
+      }
+
+      const a=document.createElement('a');
+      a.download='pfp.png';
+      a.href=off.toDataURL('image/png');
+      a.click();
+    });
+
+    render();
+  </script>
+</body>
+</html>
 
