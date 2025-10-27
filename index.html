@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Bulk PFP Customizer</title>
 
-  <!-- Fraunces (серіф як у зразку) -->
+  <!-- Fraunces -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet"/>
@@ -16,23 +16,21 @@
       --bg-primary:#1B1A14;
       --text-primary:#FFFBEF;
       --text-secondary:#C6B6BA;
-      --accent:#FFB547;
       --line:rgba(255,255,255,.08);
-      --glow:rgba(255,181,71,.35);
       --display-font:"Fraunces",serif;
       --ui-font:system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
-body{
-  margin:0;
-  color:var(--text-primary);
-  background: url("items/bd.png") center center / cover no-repeat fixed;
-  font-family:var(--display-font);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
+    body{
+      margin:0;
+      color:var(--text-primary);
+      background:url("items/bd.png") center center / cover no-repeat fixed; /* твій фон */
+      font-family:var(--display-font);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
     /* легке затемнення поверх фото для контрасту */
     body::before{
       content:"";
@@ -43,7 +41,7 @@ body{
     /* ===== TOP BAR (як на скріні) ===== */
     header.topbar{
       position:sticky; top:0; z-index:100;
-      background:#11100Dcc; /* легка прозорість */
+      background:#11100Dcc;
       border-bottom:1px solid rgba(255,255,255,.06);
       backdrop-filter:blur(6px);
     }
@@ -54,12 +52,7 @@ body{
       display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
     .brand{display:flex; align-items:center; gap:10px; text-decoration:none}
-    .brand img{height:38px; display:block} /* ~+70% від 22px */
-    .brand .brand-text{
-      font-weight:700; font-size:18px; letter-spacing:.02em;
-      background:linear-gradient(180deg,#fffbed,#cfc7ba);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-    }
+    .brand img{height:38px; display:block} /* ~ +70% */
 
     .nav-pills{
       display:flex; align-items:center; gap:24px;
@@ -82,13 +75,18 @@ body{
       text-decoration:none; color:#FFFBEF;
       font-family:var(--display-font); font-weight:700; font-size:14px; letter-spacing:.01em;
       background:#151410; border:1px solid rgba(255,255,255,.08);
-      border-radius:10px; padding:9px 14px;
-      box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
-      transition:background .25s ease, transform .08s ease;
+      border-radius:12px; padding:12px 16px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.03),
+        0 1px 1px rgba(255,255,255,.05);
+      background-image: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.15) 0%, rgba(24,23,18,0.9) 80%);
+      transition:background .25s ease, transform .08s ease, box-shadow .25s ease;
     }
-    .nav-cta a:hover{ background:#191712 }
+    .nav-cta a:hover{
+      background-image: radial-gradient(circle at 50% 110%, rgba(255,255,255,0.22) 0%, rgba(30,29,24,0.9) 80%);
+      box-shadow:0 2px 8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.05);
+    }
     .nav-cta a:active{ transform:translateY(1px) }
-    .nav-cta svg{ opacity:.9 }
 
     /* ===== PAGE LAYOUT ===== */
     .wrap{
@@ -102,7 +100,7 @@ body{
     /* ===== STAGE / CANVAS ===== */
     .stage{
       position:relative;
-      background:#0f0f0eaa; /* трохи прозорий, щоб фон проглядав */
+      background:#0f0f0eaa;
       border:1px solid var(--line);
       border-radius:16px;
       padding:16px;
@@ -139,32 +137,45 @@ body{
     }
     .muted{ color:var(--text-secondary); font-size:12px; font-family:var(--ui-font) }
 
-    /* ===== BUTTONS ===== */
+    /* ===== BUTTONS (темний стиль без оранжевого) ===== */
     .btn{
       appearance:none; width:100%;
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      background:#2a2627; color:var(--text-primary);
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:14px 16px; cursor:pointer;
-      font-family:var(--display-font);
-      font-weight:700; letter-spacing:.02em;
-      transition:transform .08s ease, box-shadow .25s ease, background .25s ease, filter .25s ease;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      color:#FFFBEF; border:1px solid rgba(255,255,255,.08);
+      border-radius:12px; padding:12px 16px; cursor:pointer;
+      font-family:var(--display-font); font-weight:700; letter-spacing:.01em;
+      background: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.15) 0%, rgba(24,23,18,0.9) 80%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 1px 1px rgba(255,255,255,.05);
+      transition: transform .08s ease, box-shadow .25s ease, background .25s ease;
     }
-    .btn:hover{ box-shadow:0 8px 24px rgba(0,0,0,.35) inset, 0 0 0 1px rgba(255,255,255,.06) }
+    .btn:hover{
+      background: radial-gradient(circle at 50% 110%, rgba(255,255,255,0.22) 0%, rgba(30,29,24,0.9) 80%);
+      box-shadow: 0 2px 8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.05);
+    }
     .btn:active{ transform: translateY(1px) }
-
-    .btn.primary{
-      background:linear-gradient(90deg,#FFB547,#FFBD63);
-      color:#1B1A14; border:0;
-      box-shadow:0 6px 20px var(--glow);
-    }
-    .btn.primary:hover{
-      filter:brightness(1.03);
-      box-shadow:0 10px 28px var(--glow), 0 0 0 1px rgba(255,181,71,.28) inset;
+    .btn.primary{ /* без акцентного кольору */
+      background: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.15) 0%, rgba(24,23,18,0.9) 80%);
+      color:#FFFBEF; border:1px solid rgba(255,255,255,.08);
     }
 
-    /* ===== THUMBS ===== */
+    /* ===== RANGE SLIDERS (без оранжевого) ===== */
+    input[type="range"]{
+      -webkit-appearance:none; width:100%;
+      height:5px; background:rgba(255,255,255,.10);
+      border-radius:5px; outline:none;
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+      background:#dcd7c5; box-shadow:0 0 6px rgba(255,255,255,.25);
+      cursor:pointer; transition:background .2s ease, transform .1s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover{ background:#fffbe6 }
+    input[type="range"]::-webkit-slider-thumb:active{ transform:scale(0.96) }
+    input[type="range"]::-moz-range-thumb{
+      width:14px; height:14px; border-radius:50%;
+      background:#dcd7c5; cursor:pointer;
+    }
+
     .thumbs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px }
     .thumb{
       background:#1f1e1a; border:1px solid var(--line); border-radius:12px;
@@ -172,42 +183,27 @@ body{
       cursor:pointer; transition:border-color .25s, box-shadow .25s, background .25s;
     }
     .thumb img{ max-width:88%; object-fit:contain }
-    .thumb:hover{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(255,181,71,.25) inset, 0 0 16px var(--glow) }
-    .thumb.active{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(255,181,71,.38) inset, 0 0 22px var(--glow) }
+    .thumb:hover{ border-color:#dcd7c5; box-shadow:0 0 0 2px rgba(255,255,255,.15) inset, 0 0 16px rgba(255,255,255,.10) }
+    .thumb.active{ border-color:#fffbe6; box-shadow:0 0 0 2px rgba(255,255,255,.25) inset, 0 0 22px rgba(255,255,255,.15) }
 
-    /* ===== CONTROLS ===== */
     .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px }
     label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px; font-family:var(--ui-font) }
-    input[type="range"]{ width:100%; accent-color:var(--accent) }
     select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:var(--text-primary); border:1px solid var(--line); font-family:var(--ui-font) }
 
     .bar{ display:flex; gap:10px; margin-top:12px }
-
-    /* ===== responsive topbar (капсули у 2 рядки) ===== */
-    @media (max-width: 680px){
-      .topbar-inner{ flex-wrap:wrap; row-gap:10px }
-      .nav-pills{ order:3; width:100%; justify-content:center }
-      .nav-cta{ order:2; margin-left:auto }
-      .brand{ order:1 }
-    }
   </style>
 </head>
+
 <body>
-
-  <!-- ===== TOP NAV BAR ===== -->
-  <header class="topbar" aria-label="Bulk navigation">
+  <!-- TOP BAR -->
+  <header class="topbar">
     <div class="topbar-inner">
-      <a class="brand" href="#">
-        <img src="items/bulk-logo.png" alt="BULK logo"/>
-        <!-- <span class="brand-text">✦ BULK</span> -->
-      </a>
-
-      <nav class="nav-pills" aria-label="Primary">
+      <a class="brand" href="#"><img src="items/bulk-logo.png" alt="BULK logo"/></a>
+      <nav class="nav-pills">
         <a href="https://alphadocs.bulk.trade/" target="_blank" rel="noopener">Docs</a>
         <a href="https://t.me/tradebulk" target="_blank" rel="noopener">Community</a>
         <a href="https://www.bulk.trade/articles" target="_blank" rel="noopener">Articles</a>
       </nav>
-
       <div class="nav-cta">
         <a href="https://discord.gg/bulk" target="_blank" rel="noopener">
           <span>Join Discord</span>
@@ -219,8 +215,8 @@ body{
     </div>
   </header>
 
-  <!-- ===== MAIN ===== -->
-  <main class="wrap" id="main">
+  <!-- MAIN -->
+  <main class="wrap">
     <!-- Preview -->
     <section class="stage" aria-label="Preview Stage">
       <canvas id="c" width="900" height="900"></canvas>
@@ -277,7 +273,6 @@ body{
     </section>
   </main>
 
-  <!-- ===== SCRIPT ===== -->
   <script>
     /* DOM refs */
     const canvas = document.getElementById('c');
@@ -303,65 +298,63 @@ body{
     };
     const presets = {};
     Object.entries(itemPaths).forEach(([k,src])=>{
-      const i = new Image(); i.src = src; presets[k] = i;
+      const i=new Image(); i.src=src; presets[k]=i;
     });
 
     /* Utils */
     function loadImageFromFile(file){
       return new Promise((resolve, reject)=>{
-        const r = new FileReader();
-        r.onload = ()=>{
-          const img = new Image();
-          img.onload = ()=>resolve(img);
-          img.onerror = ()=>reject(new Error('decode failed'));
-          img.src = r.result;
+        const r=new FileReader();
+        r.onload=()=>{
+          const img=new Image();
+          img.onload=()=>resolve(img);
+          img.onerror=()=>reject(new Error('decode failed'));
+          img.src=r.result;
         };
-        r.onerror = ()=>reject(new Error('read failed'));
+        r.onerror=()=>reject(new Error('read failed'));
         r.readAsDataURL(file);
       });
     }
     function fitCanvasToImage(img){
-      const MAX = 1400;
-      let w = img.naturalWidth, h = img.naturalHeight;
-      const k = Math.min(1, MAX/Math.max(w,h));
-      canvas.width = Math.round(w*k);
-      canvas.height = Math.round(h*k);
+      const MAX=1400; let w=img.naturalWidth, h=img.naturalHeight;
+      const k=Math.min(1, MAX/Math.max(w,h));
+      canvas.width=Math.round(w*k); canvas.height=Math.round(h*k);
     }
     function centerCap(imgLike){
-      const iw = imgLike.width || imgLike.naturalWidth;
-      const ih = imgLike.height || imgLike.naturalHeight;
-      state.cap.w = iw; state.cap.h = ih;
-      state.cap.scale = Math.min(1, (canvas.width/iw)*0.5);
-      state.cap.rot = 0;
-      state.cap.x = canvas.width/2 - (iw*state.cap.scale)/2;
-      state.cap.y = canvas.height*0.2;
-      scaleInput.value = String(state.cap.scale);
-      rotateInput.value = String(state.cap.rot);
-      opacityInput.value = String(state.cap.alpha);
+      const iw=imgLike.width||imgLike.naturalWidth;
+      const ih=imgLike.height||imgLike.naturalHeight;
+      state.cap.w=iw; state.cap.h=ih;
+      state.cap.scale=Math.min(1, (canvas.width/iw)*0.5);
+      state.cap.rot=0;
+      state.cap.x=canvas.width/2-(iw*state.cap.scale)/2;
+      state.cap.y=canvas.height*0.2;
+      scaleInput.value=String(state.cap.scale);
+      rotateInput.value=String(state.cap.rot);
+      opacityInput.value=String(state.cap.alpha);
     }
     function render(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
       if(state.bgImg) ctx.drawImage(state.bgImg,0,0,canvas.width,canvas.height);
-      else { ctx.fillStyle = '#0f0f0e'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+      else { ctx.fillStyle='#0f0f0e'; ctx.fillRect(0,0,canvas.width,canvas.height); }
 
       if(state.capImg){
-        const {x,y,w,h,scale,rot,alpha} = state.cap;
-        const cw = w*scale, ch = h*scale;
-        const cx = x+cw/2, cy = y+ch/2;
+        const {x,y,w,h,scale,rot,alpha}=state.cap;
+        const cw=w*scale, ch=h*scale;
+        const cx=x+cw/2, cy=y+ch/2;
         ctx.save();
         ctx.translate(cx,cy);
         ctx.rotate(rot*Math.PI/180);
-        ctx.globalAlpha = alpha;
+        ctx.globalAlpha=alpha;
         ctx.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
         ctx.restore();
-        ctx.globalAlpha = 1;
+        ctx.globalAlpha=1;
       }
     }
 
     /* Upload */
     pickPhotoBtn.addEventListener('click', ()=> photoInput.click());
     photoInput.addEventListener('change', async ()=>{
-      const f = photoInput.files?.[0]; if(!f) return;
+      const f=photoInput.files?.[0]; if(!f) return;
       try{
         const img = await loadImageFromFile(f);
         state.bgImg = img;
@@ -374,8 +367,8 @@ body{
 
     /* Select item */
     thumbs.addEventListener('click', e=>{
-      const box = e.target.closest('.thumb'); if(!box) return;
-      const key = box.getAttribute('data-mask'); if(!key) return;
+      const box=e.target.closest('.thumb'); if(!box) return;
+      const key=box.getAttribute('data-mask'); if(!key) return;
       state.capImg = presets[key];
       centerCap(state.capImg);
       document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
@@ -401,46 +394,42 @@ body{
     dlBtn.addEventListener('click', ()=>{
       const opt = exportSizeSel.value;
       if(opt==='orig'){
-        const a = document.createElement('a');
-        a.download = 'pfp.png';
-        a.href = canvas.toDataURL('image/png');
+        const a=document.createElement('a');
+        a.download='pfp.png';
+        a.href=canvas.toDataURL('image/png');
         a.click();
         return;
       }
-      const size = parseInt(opt,10);
-      const off = document.createElement('canvas'); off.width=size; off.height=size;
-      const g = off.getContext('2d');
+      const size=parseInt(opt,10);
+      const off=document.createElement('canvas'); off.width=size; off.height=size;
+      const g=off.getContext('2d');
 
-      // Фон
+      // фон
       if(state.bgImg) g.drawImage(state.bgImg,0,0,size,size);
       else { g.fillStyle='#0f0f0e'; g.fillRect(0,0,size,size); }
 
-      // Кепка
+      // кепка
       if(state.capImg){
         const k = Math.min(size/canvas.width, size/canvas.height);
-        const {x,y,w,h,scale,rot,alpha} = state.cap;
-        const cw = w*scale*k, ch = h*scale*k;
-        const cx = (x*k)+cw/2, cy = (y*k)+ch/2;
-        g.save();
-        g.translate(cx,cy);
-        g.rotate(rot*Math.PI/180);
-        g.globalAlpha = alpha;
+        const {x,y,w,h,scale,rot,alpha}=state.cap;
+        const cw=w*scale*k, ch=h*scale*k;
+        const cx=(x*k)+cw/2, cy=(y*k)+ch/2;
+        g.save(); g.translate(cx,cy); g.rotate(rot*Math.PI/180); g.globalAlpha=alpha;
         g.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
-        g.restore();
-        g.globalAlpha = 1;
+        g.restore(); g.globalAlpha=1;
       }
 
-      const a = document.createElement('a');
-      a.download = 'pfp.png';
-      a.href = off.toDataURL('image/png');
+      const a=document.createElement('a');
+      a.download='pfp.png';
+      a.href=off.toDataURL('image/png');
       a.click();
     });
 
     /* Drag & Drop */
     function canvasPoint(e){
-      const r = canvas.getBoundingClientRect();
-      const clientX = (e.touches?.[0]?.clientX ?? e.clientX);
-      const clientY = (e.touches?.[0]?.clientY ?? e.clientY);
+      const r=canvas.getBoundingClientRect();
+      const clientX=(e.touches?.[0]?.clientX ?? e.clientX);
+      const clientY=(e.touches?.[0]?.clientY ?? e.clientY);
       return {
         x:(clientX-r.left)*(canvas.width/r.width),
         y:(clientY-r.top)*(canvas.height/r.height)
@@ -448,19 +437,19 @@ body{
     }
     function hitCap(mx,my){
       if(!state.capImg) return false;
-      const {x,y,w,h,scale,rot} = state.cap;
-      const cw = w*scale, ch = h*scale;
-      const cx = x+cw/2, cy = y+ch/2;
-      const dx = mx-cx, dy = my-cy;
-      const ang = -rot*Math.PI/180;
-      const rx = dx*Math.cos(ang) - dy*Math.sin(ang);
-      const ry = dx*Math.sin(ang) + dy*Math.cos(ang);
+      const {x,y,w,h,scale,rot}=state.cap;
+      const cw=w*scale, ch=h*scale;
+      const cx=x+cw/2, cy=y+ch/2;
+      const dx=mx-cx, dy=my-cy;
+      const ang=-rot*Math.PI/180;
+      const rx=dx*Math.cos(ang)-dy*Math.sin(ang);
+      const ry=dx*Math.sin(ang)+dy*Math.cos(ang);
       return (rx>=-cw/2 && rx<=cw/2 && ry>=-ch/2 && ry<=ch/2);
     }
     let dragging=false, dragOff={x:0,y:0};
     function onDown(e){
       if(!state.capImg) return;
-      const {x,y} = canvasPoint(e);
+      const {x,y}=canvasPoint(e);
       if(hitCap(x,y)){
         dragging=true;
         dragOff.x=x-state.cap.x; dragOff.y=y-state.cap.y;
@@ -479,7 +468,10 @@ body{
       state.cap.y = y - dragOff.y;
       render();
     }
-    function onUp(){ dragging=false; canvas.style.cursor='default'; }
+    function onUp(){
+      dragging=false;
+      canvas.style.cursor='default';
+    }
     canvas.addEventListener('mousedown',onDown);
     window.addEventListener('mousemove',onMove);
     window.addEventListener('mouseup',onUp);
