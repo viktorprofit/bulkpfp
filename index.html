@@ -4,6 +4,12 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Bulk PFP Customizer</title>
+
+  <!-- Display serif (closer to your sample) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet"/>
+
   <style>
     /* ===== THEME (Bulk) ===== */
     :root{
@@ -15,6 +21,9 @@
       --accent:#FFB547;
       --line:rgba(255,255,255,.08);
       --glow:rgba(255,181,71,.35);
+
+      --display-font: "Fraunces", serif;
+      --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
     }
 
     /* ===== BASE ===== */
@@ -27,7 +36,7 @@
         radial-gradient(1200px 800px at 20% -10%, rgba(255,181,71,.07), transparent 45%),
         radial-gradient(1000px 700px at 110% 120%, rgba(255,181,71,.05), transparent 45%),
         linear-gradient(180deg,var(--bulk-base),var(--bg-primary));
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family: var(--display-font); /* <-- увесь сайт на новому шрифті */
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
@@ -61,7 +70,7 @@
       border-radius:12px;
       display:block;
       cursor:grab;
-      touch-action:none; /* для коректного drag на мобільних */
+      touch-action:none;
     }
 
     /* ===== PANELS ===== */
@@ -73,8 +82,17 @@
       box-shadow:0 8px 22px rgba(0,0,0,.35);
     }
     .panel + .panel{ margin-top:10px }
-    .title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
-    .muted{color:var(--text-secondary);font-size:12px}
+
+    .title{
+      display:flex;align-items:center;gap:10px;
+      font-family: var(--display-font);
+      font-weight:700; font-size:22px; letter-spacing:.01em;
+      /* легкий “металевий” ефект */
+      background: linear-gradient(180deg,#fffbed,#bfb7ab);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow: 0 0 0 rgba(0,0,0,0); /* чистий градієнт без тіні */
+    }
+    .muted{color:var(--text-secondary);font-size:12px;font-family: var(--ui-font)}
 
     /* ===== BUTTONS ===== */
     .btn{
@@ -84,7 +102,8 @@
       border:1px solid var(--line);
       border-radius:12px;
       padding:14px 16px;cursor:pointer;
-      font-weight:700;letter-spacing:.02em;
+      font-family: var(--display-font); /* новий шрифт і для кнопок */
+      font-weight:700; letter-spacing:.02em;
       transition:transform .08s ease, box-shadow .25s ease, background .25s ease, filter .25s ease;
     }
     .btn:hover{ box-shadow:0 8px 24px rgba(0,0,0,.35) inset, 0 0 0 1px rgba(255,255,255,.06) }
@@ -113,9 +132,9 @@
 
     /* ===== CONTROLS ===== */
     .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px }
-    label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px }
+    label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px; font-family: var(--ui-font) }
     input[type="range"]{ width:100%; accent-color:var(--accent) }
-    select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:var(--text-primary); border:1px solid var(--line) }
+    select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:var(--text-primary); border:1px solid var(--line); font-family: var(--ui-font) }
     .bar{ display:flex; gap:10px; margin-top:12px }
   </style>
 </head>
@@ -194,7 +213,7 @@
     /* ===== State ===== */
     const state = { bgImg:null, capImg:null, cap:{x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1} };
 
-    /* ===== Items (3, з тими самими іменами) ===== */
+    /* ===== Items ===== */
     const itemPaths = {
       cap1:'items/cap-a.png',
       cap2:'items/cap-b.png',
