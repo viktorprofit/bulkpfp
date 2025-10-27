@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Bulk PFP Customizer</title>
 
-  <!-- Fraunces -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet"/>
@@ -24,7 +23,6 @@
     *{box-sizing:border-box}
     html,body{height:100%}
 
-    /* фон сторінки */
     body{
       margin:0;
       color:var(--text-primary);
@@ -34,18 +32,13 @@
       -moz-osx-font-smoothing:grayscale;
     }
 
-    /* делікатний шар з лого під контентом */
     #flakes{
       position:fixed; inset:0;
       width:100vw; height:100vh;
       pointer-events:none;
-      z-index:0; /* контент буде поверх */
-    }
-    @media (prefers-reduced-motion: reduce){
-      #flakes{ display:none; }
+      z-index:0;
     }
 
-    /* ===== TOP BAR ===== */
     header.topbar{
       position:sticky; top:0; z-index:100;
       background:#11100Dcc;
@@ -73,17 +66,14 @@
     }
     .nav-pills a:hover{ opacity:1; background:rgba(255,255,255,.03) }
 
-    /* контент над шаром flakes */
     .wrap, .topbar-inner{ position:relative; z-index:1 }
 
-    /* ===== LAYOUT ===== */
     .wrap{
       max-width:1100px; margin:20px auto; padding:0 16px;
       display:grid; gap:20px; grid-template-columns:1fr;
     }
     @media(min-width:1100px){ .wrap{ grid-template-columns:1.2fr .9fr } }
 
-    /* ===== STAGE / CANVAS ===== */
     .stage{
       position:relative;
       background:#0f0f0eaa;
@@ -105,7 +95,6 @@
       touch-action:none;
     }
 
-    /* ===== PANELS ===== */
     .panel{
       background:linear-gradient(180deg, rgba(27,26,20,.96), rgba(24,23,18,.94));
       border:1px solid var(--line);
@@ -123,9 +112,9 @@
     }
     .muted{ color:var(--text-secondary); font-size:12px; font-family:var(--ui-font) }
 
-    /* ===== BUTTONS (темний стиль) ===== */
     .btn{
-      appearance:none; width:100%;
+      appearance:none;
+      width:auto;
       display:inline-flex; align-items:center; justify-content:center; gap:8px;
       color:#FFFBEF; border:1px solid rgba(255,255,255,.08);
       border-radius:12px; padding:12px 16px; cursor:pointer;
@@ -135,13 +124,13 @@
       transition:transform .08s ease, box-shadow .25s ease, background .25s ease;
       text-decoration:none;
     }
+    .panel .btn, .bar .btn{ width:100%; }
     .btn:hover{
       background:radial-gradient(circle at 50% 110%, rgba(30,29,24,0.25) 0%, rgba(24,23,18,0.95) 75%);
       box-shadow:0 2px 8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.05);
     }
     .btn:active{ transform:translateY(1px) }
 
-    /* ===== SLIDERS (без оранжевого) ===== */
     input[type="range"]{
       -webkit-appearance:none; width:100%;
       height:5px; background:rgba(255,255,255,.10);
@@ -153,10 +142,6 @@
       cursor:pointer; transition:background .2s ease, transform .1s ease;
     }
     input[type="range"]::-webkit-slider-thumb:hover{ background:#fffbe6 }
-    input[type="range"]::-moz-range-thumb{
-      width:14px; height:14px; border-radius:50%;
-      background:#dcd7c5; cursor:pointer;
-    }
 
     .thumbs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px }
     .thumb{
@@ -172,44 +157,38 @@
     label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px; font-family:var(--ui-font) }
     select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:#fff; border:1px solid var(--line) }
 
-    @media (max-width: 680px){
-      .topbar-inner{ flex-wrap:wrap; row-gap:10px }
-      .nav-pills{ order:3; width:100%; justify-content:center }
-      .brand{ order:1 }
+    .bar{
+      display:flex; justify-content:space-between; gap:12px; margin-top:14px;
+    }
+    .btn.secondary{
+      background:radial-gradient(circle at 50% 120%, rgba(255,255,255,0.05) 0%, rgba(24,23,18,0.9) 80%);
+      border:1px solid rgba(255,255,255,.06);
+      color:#dcd7c5;
+    }
+    .btn.secondary:hover{
+      background:radial-gradient(circle at 50% 110%, rgba(30,29,24,0.2) 0%, rgba(24,23,18,0.95) 75%);
     }
   </style>
 </head>
 
 <body>
-  <!-- делікатні логотипи під контентом -->
   <canvas id="flakes" aria-hidden="true"></canvas>
 
-  <!-- TOP BAR -->
-  <header class="topbar" aria-label="Bulk navigation">
+  <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="#"><img src="items/bulk-logo.png" alt="BULK logo"/></a>
-      <nav class="nav-pills" aria-label="Primary">
-        <a href="https://alphadocs.bulk.trade/" target="_blank" rel="noopener">Docs</a>
-        <a href="https://t.me/tradebulk" target="_blank" rel="noopener">Community</a>
-        <a href="https://www.bulk.trade/articles" target="_blank" rel="noopener">Articles</a>
+      <nav class="nav-pills">
+        <a href="https://alphadocs.bulk.trade/" target="_blank">Docs</a>
+        <a href="https://t.me/tradebulk" target="_blank">Community</a>
+        <a href="https://www.bulk.trade/articles" target="_blank">Articles</a>
       </nav>
-      <a class="btn" href="https://discord.gg/bulk" target="_blank" rel="noopener">
-        <span>Join Discord</span>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M7 17L17 7M17 7H9M17 7V15"/>
-        </svg>
-      </a>
+      <a class="btn" href="https://discord.gg/bulk" target="_blank">Join Discord</a>
     </div>
   </header>
 
-  <!-- MAIN -->
   <main class="wrap">
-    <!-- Preview -->
-    <section class="stage" aria-label="Preview Stage">
-      <canvas id="c" width="900" height="900"></canvas>
-    </section>
+    <section class="stage"><canvas id="c" width="900" height="900"></canvas></section>
 
-    <!-- Controls -->
     <section>
       <div class="panel">
         <div class="title">Upload PFP</div>
@@ -221,27 +200,18 @@
       <div class="panel">
         <div class="title">Select Item</div>
         <div class="thumbs" id="thumbs">
-          <button class="thumb" data-mask="cap1" title="Cap A"><img src="items/cap-a.png" alt="Cap A"></button>
-          <button class="thumb" data-mask="cap2" title="Cap B"><img src="items/cap-b.png" alt="Cap B"></button>
-          <button class="thumb" data-mask="bucket" title="Bucket Hat"><img src="items/bucket-hat.png" alt="Bucket Hat"></button>
+          <button class="thumb" data-mask="cap1"><img src="items/cap-a.png"></button>
+          <button class="thumb" data-mask="cap2"><img src="items/cap-b.png"></button>
+          <button class="thumb" data-mask="bucket"><img src="items/bucket-hat.png"></button>
         </div>
 
         <div class="row">
-          <div>
-            <label for="scale">Scale</label>
-            <input id="scale" type="range" min="0.2" max="3" value="1" step="0.01">
-          </div>
-          <div>
-            <label for="rotate">Rotate (°)</label>
-            <input id="rotate" type="range" min="-180" max="180" value="0" step="1">
-          </div>
+          <div><label for="scale">Scale</label><input id="scale" type="range" min="0.2" max="3" value="1" step="0.01"></div>
+          <div><label for="rotate">Rotate (°)</label><input id="rotate" type="range" min="-180" max="180" value="0" step="1"></div>
         </div>
 
         <div class="row">
-          <div>
-            <label for="opacity">Opacity</label>
-            <input id="opacity" type="range" min="0" max="1" value="1" step="0.01">
-          </div>
+          <div><label for="opacity">Opacity</label><input id="opacity" type="range" min="0" max="1" value="1" step="0.01"></div>
           <div>
             <label for="exportSize">Export Size</label>
             <select id="exportSize">
@@ -254,268 +224,36 @@
 
         <div class="bar">
           <button id="download" class="btn">⬇ Download PNG</button>
-          <button id="reset" class="btn">↻ Reset</button>
+          <button id="reset" class="btn secondary">↻ Reset</button>
         </div>
       </div>
     </section>
   </main>
 
   <script>
-    /* ===== gentle logos background (under content) ===== */
-    (() => {
-      const cnv = document.getElementById('flakes');
-      if(!cnv) return;
-      const ctx = cnv.getContext('2d');
+  /* falling logos */
+  (()=>{const cnv=document.getElementById('flakes');if(!cnv)return;const ctx=cnv.getContext('2d');function resize(){const dpr=Math.min(window.devicePixelRatio||1,2);cnv.width=Math.floor(innerWidth*dpr);cnv.height=Math.floor(innerHeight*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}resize();addEventListener('resize',resize);const img=new Image();img.src='items/logo-snow.png';const flakes=[];const MAX=10;function spawn(){const s=Math.random()*18+10;flakes.push({x:Math.random()*innerWidth,y:-s,vy:0.4+Math.random()*0.6,vx:(Math.random()-0.5)*0.4,rot:Math.random()*Math.PI*2,vr:(Math.random()-0.5)*0.02,s,alpha:0.2+Math.random()*0.25});}
+  function frame(){ctx.clearRect(0,0,innerWidth,innerHeight);if(!img.complete){requestAnimationFrame(frame);return;}while(flakes.length<MAX)spawn();for(let i=flakes.length-1;i>=0;i--){const f=flakes[i];f.x+=f.vx;f.y+=f.vy;f.rot+=f.vr;ctx.save();ctx.globalAlpha=f.alpha;ctx.translate(f.x,f.y);ctx.rotate(f.rot);ctx.drawImage(img,-f.s/2,-f.s/2,f.s,f.s);ctx.restore();if(f.y>innerHeight+40)flakes.splice(i,1);}requestAnimationFrame(frame);}frame();})();
 
-      let dpr = 1;
-      function resize(){
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        cnv.width  = Math.floor(window.innerWidth  * dpr);
-        cnv.height = Math.floor(window.innerHeight * dpr);
-        cnv.style.width  = window.innerWidth  + 'px';
-        cnv.style.height = window.innerHeight + 'px';
-        ctx.setTransform(dpr,0,0,dpr,0,0);
-      }
-      resize();
-      window.addEventListener('resize', resize);
-
-      const img = new Image();
-      img.src = 'items/logo-snow.png'; // поклади у /items/
-
-      const maxFlakes = matchMedia('(max-width: 700px)').matches ? 6 : 10;
-      const flakes = [];
-      const TWO_PI = Math.PI * 2;
-      let running = true;
-
-      function spawnOne(){
-        const s  = Math.random()*18 + 10;      // 10–28px
-        const x  = Math.random()*window.innerWidth;
-        const y  = -s - Math.random()*100;
-        const vy = 0.25 + Math.random()*0.55;
-        const vx = (Math.random()*0.4 - 0.2);
-        const rot= Math.random()*TWO_PI;
-        const vr = (Math.random()*0.02 - 0.01);
-        const phase = Math.random()*TWO_PI;
-        const alpha = 0.22 + Math.random()*0.25;
-        flakes.push({x,y,s,vy,vx,rot,vr,phase,t:Math.random()*TWO_PI,alpha});
-      }
-
-      function loop(){
-        if (!running || !img.complete){ requestAnimationFrame(loop); return; }
-
-        ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
-
-        while (flakes.length < maxFlakes) spawnOne();
-
-        for (let i=flakes.length-1; i>=0; i--){
-          const f = flakes[i];
-          f.t = (f.t || 0) + 0.015 + Math.random()*0.01;
-          f.y += f.vy;
-          f.x += f.vx + Math.sin(f.t + f.phase) * 0.3;
-          f.rot += f.vr;
-
-          ctx.save();
-          ctx.globalAlpha = f.alpha;
-          ctx.translate(f.x, f.y);
-          ctx.rotate(f.rot);
-          ctx.drawImage(img, -f.s/2, -f.s/2, f.s, f.s);
-          ctx.restore();
-
-          if (f.y - f.s > window.innerHeight + 30){
-            flakes.splice(i,1);
-          }
-        }
-
-        requestAnimationFrame(loop);
-      }
-
-      document.addEventListener('visibilitychange', ()=>{ running = !document.hidden; });
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        requestAnimationFrame(loop);
-      } else {
-        cnv.style.display = 'none';
-      }
-    })();
-
-    /* ===== PFP Customizer ===== */
-    const canvas = document.getElementById('c');
-    const ctx2 = canvas.getContext('2d');
-    const photoInput = document.getElementById('photo');
-    const pickPhotoBtn = document.getElementById('pickPhoto');
-    const thumbs = document.getElementById('thumbs');
-    const scaleInput = document.getElementById('scale');
-    const rotateInput = document.getElementById('rotate');
-    const opacityInput = document.getElementById('opacity');
-    const exportSizeSel = document.getElementById('exportSize');
-    const resetBtn = document.getElementById('reset');
-    const dlBtn = document.getElementById('download');
-
-    const state = { bgImg:null, capImg:null, cap:{x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1} };
-
-    const itemPaths = {
-      cap1:'items/cap-a.png',
-      cap2:'items/cap-b.png',
-      bucket:'items/bucket-hat.png'
-    };
-    const presets={};
-    Object.entries(itemPaths).forEach(([k,src])=>{ const i=new Image(); i.src=src; presets[k]=i; });
-
-    function loadImageFromFile(file){
-      return new Promise((resolve,reject)=>{
-        const r=new FileReader();
-        r.onload=()=>{
-          const img=new Image();
-          img.onload=()=>resolve(img);
-          img.onerror=()=>reject(new Error('decode failed'));
-          img.src=r.result;
-        };
-        r.onerror=()=>reject(new Error('read failed'));
-        r.readAsDataURL(file);
-      });
-    }
-    function fitCanvasToImage(img){
-      const MAX=1400; let w=img.naturalWidth, h=img.naturalHeight;
-      const k=Math.min(1, MAX/Math.max(w,h));
-      canvas.width=Math.round(w*k); canvas.height=Math.round(h*k);
-    }
-    function centerCap(imgLike){
-      const iw=imgLike.width||imgLike.naturalWidth;
-      const ih=imgLike.height||imgLike.naturalHeight;
-      state.cap.w=iw; state.cap.h=ih;
-      state.cap.scale=Math.min(1, (canvas.width/iw)*0.5);
-      state.cap.rot=0;
-      state.cap.x=canvas.width/2-(iw*state.cap.scale)/2;
-      state.cap.y=canvas.height*0.2;
-      scaleInput.value=String(state.cap.scale);
-      rotateInput.value=String(state.cap.rot);
-      opacityInput.value=String(state.cap.alpha);
-    }
-    function render(){
-      ctx2.clearRect(0,0,canvas.width,canvas.height);
-      if(state.bgImg) ctx2.drawImage(state.bgImg,0,0,canvas.width,canvas.height);
-      else { ctx2.fillStyle='#0f0f0e'; ctx2.fillRect(0,0,canvas.width,canvas.height); }
-
-      if(state.capImg){
-        const {x,y,w,h,scale,rot,alpha}=state.cap;
-        const cw=w*scale, ch=h*scale;
-        const cx=x+cw/2, cy=y+ch/2;
-        ctx2.save();
-        ctx2.translate(cx,cy);
-        ctx2.rotate(rot*Math.PI/180);
-        ctx2.globalAlpha=alpha;
-        ctx2.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
-        ctx2.restore();
-        ctx2.globalAlpha=1;
-      }
-    }
-
-    pickPhotoBtn.addEventListener('click', ()=> photoInput.click());
-    photoInput.addEventListener('change', async ()=>{
-      const f=photoInput.files?.[0]; if(!f) return;
-      try{
-        const img = await loadImageFromFile(f);
-        state.bgImg = img;
-        fitCanvasToImage(img);
-        render();
-      }catch(err){
-        alert('Please upload PNG, JPG, or WebP.');
-      }
-    });
-
-    thumbs.addEventListener('click', e=>{
-      const box=e.target.closest('.thumb'); if(!box) return;
-      const key=box.getAttribute('data-mask'); if(!key) return;
-      state.capImg = presets[key];
-      centerCap(state.capImg);
-      document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
-      box.classList.add('active');
-      render();
-    });
-
-    /* drag */
-    function canvasPoint(e){
-      const r=canvas.getBoundingClientRect();
-      const clientX=(e.touches?.[0]?.clientX ?? e.clientX);
-      const clientY=(e.touches?.[0]?.clientY ?? e.clientY);
-      return {
-        x:(clientX-r.left)*(canvas.width/r.width),
-        y:(clientY-r.top)*(canvas.height/r.height)
-      };
-    }
-    function hitCap(mx,my){
-      if(!state.capImg) return false;
-      const {x,y,w,h,scale,rot}=state.cap;
-      const cw=w*scale, ch=h*scale;
-      const cx=x+cw/2, cy=y+ch/2;
-      const dx=mx-cx, dy=my-cy;
-      const ang=-rot*Math.PI/180;
-      const rx=dx*Math.cos(ang)-dy*Math.sin(ang);
-      const ry=dx*Math.sin(ang)+dy*Math.cos(ang);
-      return (rx>=-cw/2 && rx<=cw/2 && ry>=-ch/2 && ry<=ch/2);
-    }
-    let dragging=false, dragOff={x:0,y:0};
-    function onDown(e){
-      if(!state.capImg) return;
-      const {x,y}=canvasPoint(e);
-      if(hitCap(x,y)){
-        dragging=true;
-        dragOff.x=x-state.cap.x; dragOff.y=y-state.cap.y;
-        canvas.style.cursor='grabbing';
-        e.preventDefault();
-      }
-    }
-    function onMove(e){
-      if(!dragging){
-        const p=canvasPoint(e);
-        canvas.style.cursor = hitCap(p.x,p.y) ? 'grab' : 'default';
-        return;
-      }
-      const {x,y}=canvasPoint(e);
-      state.cap.x = x - dragOff.x;
-      state.cap.y = y - dragOff.y;
-      render();
-    }
-    function onUp(){ dragging=false; canvas.style.cursor='default' }
-    canvas.addEventListener('mousedown',onDown);
-    window.addEventListener('mousemove',onMove);
-    window.addEventListener('mouseup',onUp);
-    canvas.addEventListener('touchstart',onDown,{passive:false});
-    window.addEventListener('touchmove',onMove,{passive:false});
-    window.addEventListener('touchend',onUp);
-
-    /* controls */
-    scaleInput.addEventListener('input',()=>{ state.cap.scale=parseFloat(scaleInput.value||'1'); render(); });
-    rotateInput.addEventListener('input',()=>{ state.cap.rot=parseFloat(rotateInput.value||'0'); render(); });
-    opacityInput.addEventListener('input',()=>{ state.cap.alpha=parseFloat(opacityInput.value||'1'); render(); });
-
-    /* export */
-    function exportPNG(size){
-      const off=document.createElement('canvas');
-      const g=off.getContext('2d');
-      if(size==='orig'){ off.width=canvas.width; off.height=canvas.height; }
-      else { size=parseInt(size,10); off.width=size; off.height=size; }
-
-      if(state.bgImg) g.drawImage(state.bgImg,0,0,off.width,off.height);
-      else { g.fillStyle='#0f0f0e'; g.fillRect(0,0,off.width,off.height); }
-
-      if(state.capImg){
-        const k = Math.min(off.width/canvas.width, off.height/canvas.height);
-        const {x,y,w,h,scale,rot,alpha}=state.cap;
-        const cw=w*scale*k, ch=h*scale*k;
-        const cx=(x*k)+cw/2, cy=(y*k)+ch/2;
-        g.save(); g.translate(cx,cy); g.rotate(rot*Math.PI/180); g.globalAlpha=alpha;
-        g.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);
-        g.restore(); g.globalAlpha=1;
-      }
-      const a=document.createElement('a');
-      a.download='pfp.png';
-      a.href=off.toDataURL('image/png');
-      a.click();
-    }
-    dlBtn.addEventListener('click',()=>{ exportPNG(exportSizeSel.value); });
-
-    /* init */
-    (function init(){ render(); })();
+  /* main logic */
+  const canvas=document.getElementById('c'),ctx2=canvas.getContext('2d');
+  const photoInput=document.getElementById('photo'),pickPhotoBtn=document.getElementById('pickPhoto'),thumbs=document.getElementById('thumbs');
+  const scaleInput=document.getElementById('scale'),rotateInput=document.getElementById('rotate'),opacityInput=document.getElementById('opacity');
+  const exportSizeSel=document.getElementById('exportSize'),resetBtn=document.getElementById('reset'),dlBtn=document.getElementById('download');
+  const state={bgImg:null,capImg:null,cap:{x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1}};
+  const itemPaths={cap1:'items/cap-a.png',cap2:'items/cap-b.png',bucket:'items/bucket-hat.png'};const presets={};for(const[k,src]of Object.entries(itemPaths)){const i=new Image();i.src=src;presets[k]=i;}
+  function loadImageFromFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej();i.src=r.result;};r.readAsDataURL(f);});}
+  function fitCanvasToImage(img){const MAX=1400;const k=Math.min(1,MAX/Math.max(img.naturalWidth,img.naturalHeight));canvas.width=img.naturalWidth*k;canvas.height=img.naturalHeight*k;}
+  function render(){ctx2.clearRect(0,0,canvas.width,canvas.height);if(state.bgImg)ctx2.drawImage(state.bgImg,0,0,canvas.width,canvas.height);else{ctx2.fillStyle='#0f0f0e';ctx2.fillRect(0,0,canvas.width,canvas.height);}if(state.capImg){const{x,y,w,h,scale,rot,alpha}=state.cap;const cw=w*scale,ch=h*scale,cx=x+cw/2,cy=y+ch/2;ctx2.save();ctx2.translate(cx,cy);ctx2.rotate(rot*Math.PI/180);ctx2.globalAlpha=alpha;ctx2.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);ctx2.restore();ctx2.globalAlpha=1;}}
+  pickPhotoBtn.onclick=()=>photoInput.click();
+  photoInput.onchange=async()=>{const f=photoInput.files?.[0];if(!f)return;const img=await loadImageFromFile(f);state.bgImg=img;fitCanvasToImage(img);render();};
+  thumbs.onclick=e=>{const b=e.target.closest('.thumb');if(!b)return;const k=b.dataset.mask;if(!k)return;state.capImg=presets[k];const iw=state.capImg.width,ih=state.capImg.height;state.cap.w=iw;state.cap.h=ih;state.cap.scale=Math.min(1,canvas.width/iw*0.5);state.cap.x=canvas.width/2-(iw*state.cap.scale)/2;state.cap.y=canvas.height*0.2;document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));b.classList.add('active');render();};
+  scaleInput.oninput=()=>{state.cap.scale=parseFloat(scaleInput.value);render();};
+  rotateInput.oninput=()=>{state.cap.rot=parseFloat(rotateInput.value);render();};
+  opacityInput.oninput=()=>{state.cap.alpha=parseFloat(opacityInput.value);render();};
+  resetBtn.onclick=()=>{state.bgImg=null;state.capImg=null;state.cap={x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1};scaleInput.value="1";rotateInput.value="0";opacityInput.value="1";document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));render();};
+  dlBtn.onclick=()=>{const opt=exportSizeSel.value;const size=opt==='orig'?{w:canvas.width,h:canvas.height}:{w:+opt,h:+opt};const off=document.createElement('canvas');off.width=size.w;off.height=size.h;const g=off.getContext('2d');if(state.bgImg)g.drawImage(state.bgImg,0,0,off.width,off.height);else{g.fillStyle='#0f0f0e';g.fillRect(0,0,off.width,off.height);}if(state.capImg){const k=Math.min(off.width/canvas.width,off.height/canvas.height);const{x,y,w,h,scale,rot,alpha}=state.cap;const cw=w*scale*k,ch=h*scale*k;const cx=(x*k)+cw/2,cy=(y*k)+ch/2;g.save();g.translate(cx,cy);g.rotate(rot*Math.PI/180);g.globalAlpha=alpha;g.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);g.restore();}const a=document.createElement('a');a.download='pfp.png';a.href=off.toDataURL('image/png');a.click();};
+  render();
   </script>
 </body>
 </html>
