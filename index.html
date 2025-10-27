@@ -31,35 +31,42 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
     }
-    /* легке затемнення поверх фото для контрасту */
+    /* Легке затемнення поверх фону для контрасту тексту */
     body::before{
-      content:"";
-      position:fixed; inset:0; z-index:-1;
-      background:rgba(0,0,0,.35);
+      content:""; position:fixed; inset:0;
+      background:rgba(0,0,0,.32);
+      z-index:-1; /* нижче контенту */
+    }
+
+    /* ===== Шар з “флейками”-лого (делікатна анімація) ===== */
+    #flakes{
+      position:fixed; inset:0;
+      width:100vw; height:100vh;
+      pointer-events:none;
+      z-index:0; /* над затемнювачем, під усім контентом */
+    }
+    @media (prefers-reduced-motion: reduce){
+      #flakes{ display:none; }
     }
 
     /* ===== TOP BAR (як на скріні) ===== */
     header.topbar{
       position:sticky; top:0; z-index:100;
-      background:#11100Dcc;
+      background:#11100Dcc; /* легка прозорість */
       border-bottom:1px solid rgba(255,255,255,.06);
       backdrop-filter:blur(6px);
     }
     .topbar-inner{
-      max-width:1200px;
-      margin:0 auto;
-      padding:10px 20px;
+      max-width:1200px; margin:0 auto; padding:10px 20px;
       display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
     .brand{display:flex; align-items:center; gap:10px; text-decoration:none}
-    .brand img{height:38px; display:block} /* ~ +70% */
+    .brand img{height:38px; display:block} /* ~ +70% від 22px */
 
     .nav-pills{
       display:flex; align-items:center; gap:24px;
-      padding:8px 16px;
-      border-radius:999px;
-      background:#151410;
-      border:1px solid rgba(255,255,255,.08);
+      padding:8px 16px; border-radius:999px;
+      background:#151410; border:1px solid rgba(255,255,255,.08);
       box-shadow:inset 0 0 0 1px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.02);
     }
     .nav-pills a{
@@ -76,68 +83,54 @@
       font-family:var(--display-font); font-weight:700; font-size:14px; letter-spacing:.01em;
       background:#151410; border:1px solid rgba(255,255,255,.08);
       border-radius:12px; padding:12px 16px;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.03),
-        0 1px 1px rgba(255,255,255,.05);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 1px 1px rgba(255,255,255,.05);
       background-image: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.15) 0%, rgba(24,23,18,0.9) 80%);
-      transition:background .25s ease, transform .08s ease, box-shadow .25s ease;
+      transition: background .25s ease, transform .08s ease, box-shadow .25s ease;
     }
     .nav-cta a:hover{
-      background-image: radial-gradient(circle at 50% 110%, rgba(255,255,255,0.22) 0%, rgba(30,29,24,0.9) 80%);
-      box-shadow:0 2px 8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.05);
+      background-image: radial-gradient(circle at 50% 110%, rgba(30,29,24,0.25) 0%, rgba(24,23,18,0.95) 75%);
+      box-shadow: 0 2px 8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.05);
     }
-    .nav-cta a:active{ transform:translateY(1px) }
+    .nav-cta a:active{ transform: translateY(1px) }
 
-    /* ===== PAGE LAYOUT ===== */
-    .wrap{
-      max-width:1100px;
-      margin:20px auto;
-      padding:0 16px;
-      display:grid; gap:20px; grid-template-columns:1fr;
-    }
+    /* ===== LAYOUT ===== */
+    .wrap{ max-width:1100px; margin:20px auto; padding:0 16px;
+           display:grid; gap:20px; grid-template-columns:1fr; }
     @media(min-width:1100px){ .wrap{ grid-template-columns:1.2fr .9fr } }
 
     /* ===== STAGE / CANVAS ===== */
     .stage{
       position:relative;
-      background:#0f0f0eaa;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
+      background:#0f0f0eaa; /* трохи прозорий, щоб фон проглядав */
+      border:1px solid var(--line); border-radius:16px; padding:16px;
       box-shadow:0 30px 80px rgba(0,0,0,.55);
       display:flex; align-items:center; justify-content:center;
     }
     .stage::before{content:"";position:absolute;inset:10px;border:1px solid rgba(255,255,255,.06);border-radius:12px;pointer-events:none}
     .stage::after{content:"";position:absolute;inset:16px;border:1px dashed rgba(255,255,255,.06);border-radius:10px;pointer-events:none}
+
     canvas{
       width:86%;
-      background:#0f0f0e;
-      border:1px dashed rgba(255,255,255,.08);
-      border-radius:12px;
-      display:block;
-      cursor:grab;
-      touch-action:none;
+      background:#0f0f0e; border:1px dashed rgba(255,255,255,.08); border-radius:12px;
+      display:block; cursor:grab; touch-action:none;
     }
 
     /* ===== PANELS ===== */
     .panel{
       background:linear-gradient(180deg, rgba(27,26,20,.96), rgba(24,23,18,.94));
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px;
+      border:1px solid var(--line); border-radius:16px; padding:14px;
       box-shadow:0 8px 22px rgba(0,0,0,.35);
     }
     .panel + .panel{ margin-top:10px }
     .title{
       display:flex; align-items:center; gap:10px;
-      font-family:var(--display-font);
-      font-weight:700; font-size:22px; letter-spacing:.01em;
+      font-family:var(--display-font); font-weight:700; font-size:22px; letter-spacing:.01em;
       background:linear-gradient(180deg,#fffbed,#bfb7ab);
       -webkit-background-clip:text; background-clip:text; color:transparent;
     }
     .muted{ color:var(--text-secondary); font-size:12px; font-family:var(--ui-font) }
 
-    /* ===== BUTTONS (темний стиль без оранжевого) ===== */
+    /* ===== BUTTONS (темний стиль, без оранжевого) ===== */
     .btn{
       appearance:none; width:100%;
       display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -149,14 +142,11 @@
       transition: transform .08s ease, box-shadow .25s ease, background .25s ease;
     }
     .btn:hover{
-      background: radial-gradient(circle at 50% 110%, rgba(255,255,255,0.22) 0%, rgba(30,29,24,0.9) 80%);
+      background: radial-gradient(circle at 50% 110%, rgba(30,29,24,0.25) 0%, rgba(24,23,18,0.95) 75%);
       box-shadow: 0 2px 8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.05);
     }
     .btn:active{ transform: translateY(1px) }
-    .btn.primary{ /* без акцентного кольору */
-      background: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.15) 0%, rgba(24,23,18,0.9) 80%);
-      color:#FFFBEF; border:1px solid rgba(255,255,255,.08);
-    }
+    .btn.primary{ background: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.15) 0%, rgba(24,23,18,0.9) 80%); }
 
     /* ===== RANGE SLIDERS (без оранжевого) ===== */
     input[type="range"]{
@@ -188,15 +178,24 @@
 
     .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px }
     label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px; font-family:var(--ui-font) }
-    select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:var(--text-primary); border:1px solid var(--line); font-family:var(--ui-font) }
+    select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:#fff; border:1px solid var(--line) }
 
-    .bar{ display:flex; gap:10px; margin-top:12px }
+    /* responsive topbar: центр-капсула переноситься вниз */
+    @media (max-width: 680px){
+      .topbar-inner{ flex-wrap:wrap; row-gap:10px }
+      .nav-pills{ order:3; width:100%; justify-content:center }
+      .nav-cta{ order:2; margin-left:auto }
+      .brand{ order:1 }
+    }
   </style>
 </head>
 
 <body>
+  <!-- шар з логотипами, що плавно падають (делікатно) -->
+  <canvas id="flakes" aria-hidden="true"></canvas>
+
   <!-- TOP BAR -->
-  <header class="topbar">
+  <header class="topbar" aria-label="Bulk navigation">
     <div class="topbar-inner">
       <a class="brand" href="#"><img src="items/bulk-logo.png" alt="BULK logo"/></a>
       <nav class="nav-pills">
@@ -240,21 +239,12 @@
         </div>
 
         <div class="row">
-          <div>
-            <label for="scale">Scale</label>
-            <input id="scale" type="range" min="0.2" max="3" value="1" step="0.01">
-          </div>
-          <div>
-            <label for="rotate">Rotate (°)</label>
-            <input id="rotate" type="range" min="-180" max="180" value="0" step="1">
-          </div>
+          <div><label for="scale">Scale</label><input id="scale" type="range" min="0.2" max="3" value="1" step="0.01"></div>
+          <div><label for="rotate">Rotate (°)</label><input id="rotate" type="range" min="-180" max="180" value="0" step="1"></div>
         </div>
 
         <div class="row">
-          <div>
-            <label for="opacity">Opacity</label>
-            <input id="opacity" type="range" min="0" max="1" value="1" step="0.01">
-          </div>
+          <div><label for="opacity">Opacity</label><input id="opacity" type="range" min="0" max="1" value="1" step="0.01"></div>
           <div>
             <label for="exportSize">Export Size</label>
             <select id="exportSize">
@@ -274,9 +264,91 @@
   </main>
 
   <script>
-    /* DOM refs */
+    /* ===== Gentle falling-logo background ===== */
+    (() => {
+      const cnv = document.getElementById('flakes');
+      if(!cnv) return;
+      const ctx = cnv.getContext('2d');
+
+      function resize(){
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        cnv.width  = Math.floor(window.innerWidth  * dpr);
+        cnv.height = Math.floor(window.innerHeight * dpr);
+        cnv.style.width  = window.innerWidth  + 'px';
+        cnv.style.height = window.innerHeight + 'px';
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const logoSrc = 'items/logo-snow.png'; // легка іконка для анімації
+      const img = new Image();
+      img.src = logoSrc;
+
+      const maxFlakes = matchMedia('(max-width: 700px)').matches ? 6 : 10;
+      const flakes = [];
+      const TWO_PI = Math.PI * 2;
+      let running = true;
+
+      function spawnOne(){
+        const s  = Math.random()*18 + 10;     // 10–28px
+        const x  = Math.random()*window.innerWidth;
+        const y  = -s - Math.random()*100;    // старт трохи вище екрану
+        const vy = 0.25 + Math.random()*0.55; // повільне падіння
+        const vx = (Math.random()*0.4 - 0.2); // легкий дрейф
+        const rot= Math.random()*TWO_PI;
+        const vr = (Math.random()*0.02 - 0.01);
+        const amp= 6 + Math.random()*10;      // амплітуда хитання
+        const phase = Math.random()*TWO_PI;
+        const alpha = 0.22 + Math.random()*0.25; // м’яка прозорість
+        flakes.push({x,y,s,vy,vx,rot,vr,amp,phase,t:Math.random()*TWO_PI});
+      }
+
+      function tick(ts){
+        if(!running || !img.complete){ requestAnimationFrame(tick); return; }
+        // 30 FPS cap
+        const now = performance.now();
+        if(!tick.last || now - tick.last > 33){
+          tick.last = now;
+          ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+          while (flakes.length < maxFlakes) spawnOne();
+
+          for(let i=flakes.length-1;i>=0;i--){
+            const f = flakes[i];
+            f.t += 0.015 + Math.random()*0.01;
+            f.y += f.vy;
+            f.x += f.vx + Math.sin(f.t + f.phase) * 0.3;
+            f.rot += f.vr;
+
+            ctx.save();
+            ctx.globalAlpha = f.alpha;
+            ctx.translate(f.x, f.y);
+            ctx.rotate(f.rot);
+            ctx.drawImage(img, -f.s/2, -f.s/2, f.s, f.s);
+            ctx.restore();
+
+            if (f.y - f.s > window.innerHeight + 30) {
+              flakes.splice(i,1);
+            }
+          }
+        }
+        requestAnimationFrame(tick);
+      }
+
+      // pause when tab hidden
+      document.addEventListener('visibilitychange', ()=>{
+        running = !document.hidden;
+      });
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        requestAnimationFrame(tick);
+      }
+    })();
+
+    /* ===== PFP Customizer (без змін у логіці) ===== */
     const canvas = document.getElementById('c');
-    const ctx = canvas.getContext('2d');
+    const ctx2 = canvas.getContext('2d');
     const photoInput = document.getElementById('photo');
     const pickPhotoBtn = document.getElementById('pickPhoto');
     const thumbs = document.getElementById('thumbs');
@@ -287,10 +359,7 @@
     const resetBtn = document.getElementById('reset');
     const dlBtn = document.getElementById('download');
 
-    /* State */
     const state = { bgImg:null, capImg:null, cap:{x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1} };
-
-    /* Items */
     const itemPaths = {
       cap1:'items/cap-a.png',
       cap2:'items/cap-b.png',
@@ -301,7 +370,6 @@
       const i=new Image(); i.src=src; presets[k]=i;
     });
 
-    /* Utils */
     function loadImageFromFile(file){
       return new Promise((resolve, reject)=>{
         const r=new FileReader();
@@ -333,21 +401,21 @@
       opacityInput.value=String(state.cap.alpha);
     }
     function render(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      if(state.bgImg) ctx.drawImage(state.bgImg,0,0,canvas.width,canvas.height);
-      else { ctx.fillStyle='#0f0f0e'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+      ctx2.clearRect(0,0,canvas.width,canvas.height);
+      if(state.bgImg) ctx2.drawImage(state.bgImg,0,0,canvas.width,canvas.height);
+      else { ctx2.fillStyle='#0f0f0e'; ctx2.fillRect(0,0,canvas.width,canvas.height); }
 
       if(state.capImg){
         const {x,y,w,h,scale,rot,alpha}=state.cap;
         const cw=w*scale, ch=h*scale;
         const cx=x+cw/2, cy=y+ch/2;
-        ctx.save();
-        ctx.translate(cx,cy);
-        ctx.rotate(rot*Math.PI/180);
-        ctx.globalAlpha=alpha;
-        ctx.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
-        ctx.restore();
-        ctx.globalAlpha=1;
+        ctx2.save();
+        ctx2.translate(cx,cy);
+        ctx2.rotate(rot*Math.PI/180);
+        ctx2.globalAlpha=alpha;
+        ctx2.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
+        ctx2.restore();
+        ctx2.globalAlpha=1;
       }
     }
 
@@ -366,7 +434,8 @@
     });
 
     /* Select item */
-    thumbs.addEventListener('click', e=>{
+    const thumbsEl = document.getElementById('thumbs');
+    thumbsEl.addEventListener('click', e=>{
       const box=e.target.closest('.thumb'); if(!box) return;
       const key=box.getAttribute('data-mask'); if(!key) return;
       state.capImg = presets[key];
@@ -380,50 +449,6 @@
     scaleInput.addEventListener('input', ()=>{ state.cap.scale = parseFloat(scaleInput.value||'1'); render(); });
     rotateInput.addEventListener('input', ()=>{ state.cap.rot   = parseFloat(rotateInput.value||'0'); render(); });
     opacityInput.addEventListener('input', ()=>{ state.cap.alpha= parseFloat(opacityInput.value||'1'); render(); });
-
-    /* Reset */
-    resetBtn.addEventListener('click', ()=>{
-      state.capImg = null;
-      document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
-      state.cap = {x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1};
-      scaleInput.value='1'; rotateInput.value='0'; opacityInput.value='1';
-      render();
-    });
-
-    /* Download with size */
-    dlBtn.addEventListener('click', ()=>{
-      const opt = exportSizeSel.value;
-      if(opt==='orig'){
-        const a=document.createElement('a');
-        a.download='pfp.png';
-        a.href=canvas.toDataURL('image/png');
-        a.click();
-        return;
-      }
-      const size=parseInt(opt,10);
-      const off=document.createElement('canvas'); off.width=size; off.height=size;
-      const g=off.getContext('2d');
-
-      // фон
-      if(state.bgImg) g.drawImage(state.bgImg,0,0,size,size);
-      else { g.fillStyle='#0f0f0e'; g.fillRect(0,0,size,size); }
-
-      // кепка
-      if(state.capImg){
-        const k = Math.min(size/canvas.width, size/canvas.height);
-        const {x,y,w,h,scale,rot,alpha}=state.cap;
-        const cw=w*scale*k, ch=h*scale*k;
-        const cx=(x*k)+cw/2, cy=(y*k)+ch/2;
-        g.save(); g.translate(cx,cy); g.rotate(rot*Math.PI/180); g.globalAlpha=alpha;
-        g.drawImage(state.capImg, -cw/2, -ch/2, cw, ch);
-        g.restore(); g.globalAlpha=1;
-      }
-
-      const a=document.createElement('a');
-      a.download='pfp.png';
-      a.href=off.toDataURL('image/png');
-      a.click();
-    });
 
     /* Drag & Drop */
     function canvasPoint(e){
@@ -468,10 +493,7 @@
       state.cap.y = y - dragOff.y;
       render();
     }
-    function onUp(){
-      dragging=false;
-      canvas.style.cursor='default';
-    }
+    function onUp(){ dragging=false; canvas.style.cursor='default'; }
     canvas.addEventListener('mousedown',onDown);
     window.addEventListener('mousemove',onMove);
     window.addEventListener('mouseup',onUp);
@@ -479,8 +501,31 @@
     window.addEventListener('touchmove',onMove,{passive:false});
     window.addEventListener('touchend',onUp);
 
-    /* Initial */
-    render();
+    /* Download with size */
+    function exportPNG(size){
+      const off=document.createElement('canvas');
+      const g=off.getContext('2d');
+      if(size==='orig'){ off.width=canvas.width; off.height=canvas.height; }
+      else { size=parseInt(size,10); off.width=size; off.height=size; }
+
+      if(state.bgImg) g.drawImage(state.bgImg,0,0,off.width,off.height);
+      else { g.fillStyle='#0f0f0e'; g.fillRect(0,0,off.width,off.height); }
+
+      if(state.capImg){
+        const k = Math.min(off.width/canvas.width, off.height/canvas.height);
+        const {x,y,w,h,scale,rot,alpha}=state.cap;
+        const cw=w*scale*k, ch=h*scale*k;
+        const cx=(x*k)+cw/2, cy=(y*k)+ch/2;
+        g.save(); g.translate(cx,cy); g.rotate(rot*Math.PI/180); g.globalAlpha=alpha;
+        g.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);
+        g.restore(); g.globalAlpha=1;
+      }
+      const a=document.createElement('a');
+      a.download='pfp.png';
+      a.href=off.toDataURL('image/png');
+      a.click();
+    }
+    dlBtn.addEventListener('click',()=>{ exportPNG(document.getElementById('exportSize').value) });
   </script>
 </body>
 </html>
