@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Bulk PFP Customizer</title>
 
-  <!-- Display serif (closer to your sample) -->
+  <!-- Display serif -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet"/>
 
   <style>
-    /* ===== THEME (Bulk) ===== */
     :root{
       --bulk-base:#141310;
       --bg-primary:#1B1A14;
@@ -21,12 +20,9 @@
       --accent:#FFB547;
       --line:rgba(255,255,255,.08);
       --glow:rgba(255,181,71,.35);
-
-      --display-font: "Fraunces", serif;
-      --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      --display-font:"Fraunces",serif;
+      --ui-font:system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
     }
-
-    /* ===== BASE ===== */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -36,116 +32,142 @@
         radial-gradient(1200px 800px at 20% -10%, rgba(255,181,71,.07), transparent 45%),
         radial-gradient(1000px 700px at 110% 120%, rgba(255,181,71,.05), transparent 45%),
         linear-gradient(180deg,var(--bulk-base),var(--bg-primary));
-      font-family: var(--display-font); /* <-- увесь сайт на новому шрифті */
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-family:var(--display-font);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    .wrap{
-      max-width:1100px;
-      margin:28px auto;
-      padding:0 16px;
-      display:grid;
-      gap:20px;
-      grid-template-columns:1fr;
+    /* ===== TOP BAR ===== */
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(6px);
+      background:linear-gradient(180deg,rgba(27,26,20,.86),rgba(24,23,18,.80));
+      border-bottom:1px solid var(--line);
     }
-    @media(min-width:1100px){ .wrap{ grid-template-columns:1.2fr .9fr } }
-
-    /* ===== STAGE / CANVAS ===== */
-    .stage{
-      position:relative;
-      background:#0f0f0e;
+    .topbar-inner{
+      max-width:1100px;margin:0 auto;padding:10px 16px;
+      display:flex;align-items:center;gap:14px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-mark{
+      width:28px;height:28px;border-radius:8px;
+      background:linear-gradient(135deg,#FFB547,#FFBD63);
+      box-shadow:0 0 0 1px rgba(0,0,0,.35) inset,0 4px 16px var(--glow);
+    }
+    .brand-name{
+      font-weight:800;letter-spacing:.02em;font-size:18px;
+      background:linear-gradient(180deg,#fffbed,#cfc7ba);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+    .nav a{
+      text-decoration:none;
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:10px;
       border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
-      box-shadow:0 30px 80px rgba(0,0,0,.55);
+      background:#201f1b;
+      color:var(--text-primary);
+      font-family:var(--display-font);
+      font-weight:700;letter-spacing:.01em;font-size:14px;
+      transition:box-shadow .25s,transform .08s,background .25s;
+    }
+    .nav a:hover{box-shadow:0 0 0 2px rgba(255,181,71,.22) inset,0 6px 20px rgba(0,0,0,.3)}
+    .nav a.primary{
+      background:linear-gradient(90deg,#FFB547,#FFBD63);
+      color:#1B1A14;border:0;box-shadow:0 6px 20px var(--glow);
+    }
+    .nav a.primary:hover{filter:brightness(1.03)}
+
+    .wrap{max-width:1100px;margin:20px auto;padding:0 16px;display:grid;gap:20px;grid-template-columns:1fr}
+    @media(min-width:1100px){.wrap{grid-template-columns:1.2fr .9fr}}
+
+    .stage{
+      position:relative;background:#0f0f0e;
+      border:1px solid var(--line);border-radius:16px;
+      padding:16px;box-shadow:0 30px 80px rgba(0,0,0,.55);
       display:flex;align-items:center;justify-content:center;
     }
     .stage::before{content:"";position:absolute;inset:10px;border:1px solid rgba(255,255,255,.06);border-radius:12px;pointer-events:none}
     .stage::after{content:"";position:absolute;inset:16px;border:1px dashed rgba(255,255,255,.06);border-radius:10px;pointer-events:none}
-
     canvas{
-      width:86%;
-      background:#0f0f0e;
+      width:86%;background:#0f0f0e;
       border:1px dashed rgba(255,255,255,.08);
-      border-radius:12px;
-      display:block;
-      cursor:grab;
-      touch-action:none;
+      border-radius:12px;display:block;
+      cursor:grab;touch-action:none;
     }
 
-    /* ===== PANELS ===== */
     .panel{
-      background:linear-gradient(180deg, rgba(27,26,20,.96), rgba(24,23,18,.94));
+      background:linear-gradient(180deg,rgba(27,26,20,.96),rgba(24,23,18,.94));
       border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px;
+      border-radius:16px;padding:14px;
       box-shadow:0 8px 22px rgba(0,0,0,.35);
     }
-    .panel + .panel{ margin-top:10px }
-
+    .panel+.panel{margin-top:10px}
     .title{
       display:flex;align-items:center;gap:10px;
-      font-family: var(--display-font);
-      font-weight:700; font-size:22px; letter-spacing:.01em;
-      /* легкий “металевий” ефект */
-      background: linear-gradient(180deg,#fffbed,#bfb7ab);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-      text-shadow: 0 0 0 rgba(0,0,0,0); /* чистий градієнт без тіні */
+      font-family:var(--display-font);font-weight:700;font-size:22px;
+      letter-spacing:.01em;background:linear-gradient(180deg,#fffbed,#bfb7ab);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
     }
-    .muted{color:var(--text-secondary);font-size:12px;font-family: var(--ui-font)}
-
-    /* ===== BUTTONS ===== */
+    .muted{color:var(--text-secondary);font-size:12px;font-family:var(--ui-font)}
     .btn{
       appearance:none;width:100%;
       display:inline-flex;align-items:center;justify-content:center;gap:10px;
       background:#2a2627;color:var(--text-primary);
       border:1px solid var(--line);
-      border-radius:12px;
-      padding:14px 16px;cursor:pointer;
-      font-family: var(--display-font); /* новий шрифт і для кнопок */
-      font-weight:700; letter-spacing:.02em;
-      transition:transform .08s ease, box-shadow .25s ease, background .25s ease, filter .25s ease;
+      border-radius:12px;padding:14px 16px;cursor:pointer;
+      font-family:var(--display-font);
+      font-weight:700;letter-spacing:.02em;
+      transition:transform .08s ease,box-shadow .25s ease,background .25s ease,filter .25s ease;
     }
-    .btn:hover{ box-shadow:0 8px 24px rgba(0,0,0,.35) inset, 0 0 0 1px rgba(255,255,255,.06) }
-    .btn:active{ transform: translateY(1px) }
-
+    .btn:hover{box-shadow:0 8px 24px rgba(0,0,0,.35) inset,0 0 0 1px rgba(255,255,255,.06)}
+    .btn:active{transform:translateY(1px)}
     .btn.primary{
       background:linear-gradient(90deg,#FFB547,#FFBD63);
-      color:#1B1A14;border:0;
-      box-shadow:0 6px 20px var(--glow);
+      color:#1B1A14;border:0;box-shadow:0 6px 20px var(--glow);
     }
-    .btn.primary:hover{
-      filter:brightness(1.03);
-      box-shadow:0 10px 28px var(--glow), 0 0 0 1px rgba(255,181,71,.28) inset;
-    }
-
-    /* ===== THUMBS ===== */
-    .thumbs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px }
+    .btn.primary:hover{filter:brightness(1.03);box-shadow:0 10px 28px var(--glow),0 0 0 1px rgba(255,181,71,.28) inset}
+    .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
     .thumb{
-      background:#1f1e1a; border:1px solid var(--line); border-radius:12px;
-      min-height:78px; display:flex; align-items:center; justify-content:center;
-      cursor:pointer; transition:border-color .25s, box-shadow .25s, background .25s;
+      background:#1f1e1a;border:1px solid var(--line);border-radius:12px;
+      min-height:78px;display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:border-color .25s,box-shadow .25s,background .25s;
     }
-    .thumb img{ max-width:88%; object-fit:contain }
-    .thumb:hover{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(255,181,71,.25) inset, 0 0 16px var(--glow) }
-    .thumb.active{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(255,181,71,.38) inset, 0 0 22px var(--glow) }
-
-    /* ===== CONTROLS ===== */
-    .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px }
-    label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px; font-family: var(--ui-font) }
-    input[type="range"]{ width:100%; accent-color:var(--accent) }
-    select{ width:100%; padding:10px 12px; border-radius:10px; background:#201f1b; color:var(--text-primary); border:1px solid var(--line); font-family: var(--ui-font) }
-    .bar{ display:flex; gap:10px; margin-top:12px }
+    .thumb img{max-width:88%;object-fit:contain}
+    .thumb:hover{border-color:var(--accent);box-shadow:0 0 0 2px rgba(255,181,71,.25) inset,0 0 16px var(--glow)}
+    .thumb.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(255,181,71,.38) inset,0 0 22px var(--glow)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    label{display:block;margin:6px 0;color:var(--text-secondary);font-size:12px;font-family:var(--ui-font)}
+    input[type="range"]{width:100%;accent-color:var(--accent)}
+    select{width:100%;padding:10px 12px;border-radius:10px;background:#201f1b;color:var(--text-primary);border:1px solid var(--line);font-family:var(--ui-font)}
+    .bar{display:flex;gap:10px;margin-top:12px}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <!-- Preview -->
+
+  <!-- ===== TOP NAV BAR ===== -->
+  <header class="topbar" aria-label="Bulk top navigation">
+    <div class="topbar-inner">
+      <a class="brand" href="#">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name">Bulk • PFP Lab</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="https://alphadocs.bulk.trade/" target="_blank" rel="noopener">Docs</a>
+        <a href="https://www.bulk.trade/articles" target="_blank" rel="noopener">Articles</a>
+        <a href="https://t.me/tradebulk" target="_blank" rel="noopener">Community</a>
+        <a href="https://discord.gg/bulk" target="_blank" rel="noopener">Discord</a>
+        <a href="#" class="primary" id="nav-cta">Make your PFP</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main class="wrap" id="main">
     <section class="stage" aria-label="Preview Stage">
       <canvas id="c" width="900" height="900"></canvas>
     </section>
 
-    <!-- Controls -->
     <section>
       <div class="panel">
         <div class="title">Upload PFP</div>
@@ -163,23 +185,13 @@
         </div>
 
         <div class="row">
-          <div>
-            <label for="scale">Scale</label>
-            <input id="scale" type="range" min="0.2" max="3" value="1" step="0.01">
-          </div>
-          <div>
-            <label for="rotate">Rotate (°)</label>
-            <input id="rotate" type="range" min="-180" max="180" value="0" step="1">
-          </div>
+          <div><label for="scale">Scale</label><input id="scale" type="range" min="0.2" max="3" value="1" step="0.01"></div>
+          <div><label for="rotate">Rotate (°)</label><input id="rotate" type="range" min="-180" max="180" value="0" step="1"></div>
         </div>
 
         <div class="row">
-          <div>
-            <label for="opacity">Opacity</label>
-            <input id="opacity" type="range" min="0" max="1" value="1" step="0.01">
-          </div>
-          <div>
-            <label for="exportSize">Export Size</label>
+          <div><label for="opacity">Opacity</label><input id="opacity" type="range" min="0" max="1" value="1" step="0.01"></div>
+          <div><label for="exportSize">Export Size</label>
             <select id="exportSize">
               <option value="orig">Original</option>
               <option value="512">512 × 512</option>
@@ -197,6 +209,12 @@
   </main>
 
   <script>
+    /* Smooth scroll for CTA */
+    document.getElementById('nav-cta').addEventListener('click', (e)=>{
+      e.preventDefault();
+      document.getElementById('c')?.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+
     /* ===== DOM refs ===== */
     const canvas = document.getElementById('c');
     const ctx = canvas.getContext('2d');
@@ -299,15 +317,9 @@
     });
 
     /* ===== Controls ===== */
-    scaleInput.addEventListener('input', ()=>{
-      state.cap.scale = parseFloat(scaleInput.value||'1'); render();
-    });
-    rotateInput.addEventListener('input', ()=>{
-      state.cap.rot = parseFloat(rotateInput.value||'0'); render();
-    });
-    opacityInput.addEventListener('input', ()=>{
-      state.cap.alpha = parseFloat(opacityInput.value||'1'); render();
-    });
+    scaleInput.addEventListener('input', ()=>{ state.cap.scale = parseFloat(scaleInput.value||'1'); render(); });
+    rotateInput.addEventListener('input', ()=>{ state.cap.rot   = parseFloat(rotateInput.value||'0'); render(); });
+    opacityInput.addEventListener('input', ()=>{ state.cap.alpha= parseFloat(opacityInput.value||'1'); render(); });
 
     /* ===== Reset ===== */
     resetBtn.addEventListener('click', ()=>{
