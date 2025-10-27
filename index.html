@@ -5,88 +5,178 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Bulk PFP Customizer</title>
 
+  <!-- Fraunces -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet"/>
 
   <style>
     :root{
-      --bulk-base:#141310;
       --bg-primary:#1B1A14;
       --text-primary:#FFFBEF;
       --text-secondary:#C6B6BA;
       --line:rgba(255,255,255,.08);
       --display-font:"Fraunces",serif;
+      --ui-font:system-ui,-apple-system,"Segoe UI",Roboto,Inter,Arial,sans-serif;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
       color:var(--text-primary);
       background:url("items/bd.png") center center / cover no-repeat fixed;
       font-family:var(--display-font);
-      -webkit-font-smoothing:antialiased;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
+
+    /* ===== TOP BAR ===== */
     header.topbar{
-      position:sticky;top:0;z-index:100;
-      background:#11100Dcc;border-bottom:1px solid rgba(255,255,255,.06);
+      position:sticky; top:0; z-index:100;
+      background:#11100Dcc;
+      border-bottom:1px solid rgba(255,255,255,.06);
       backdrop-filter:blur(6px);
     }
     .topbar-inner{
-      max-width:1200px;margin:0 auto;padding:10px 20px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      max-width:1100px; margin:0 auto; padding:10px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
-    .brand img{height:38px}
-    .nav-pills{display:flex;gap:24px;padding:8px 16px;border-radius:999px;background:#151410;border:1px solid rgba(255,255,255,.08)}
-    .nav-pills a{text-decoration:none;color:#FFFBEF;font-weight:600;font-size:14px;opacity:.9;transition:.25s}
-    .nav-pills a:hover{opacity:1}
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none}
+    .brand img{height:38px; display:block}
+
+    .nav-pills{
+      display:flex; align-items:center; gap:16px;
+      padding:8px 14px; border-radius:999px;
+      background:#151410; border:1px solid rgba(255,255,255,.08);
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.02);
+    }
+    .nav-pills a{
+      text-decoration:none; color:#FFFBEF;
+      font-family:var(--display-font); font-weight:600; font-size:14px; letter-spacing:.01em;
+      opacity:.92; padding:6px 6px; border-radius:8px;
+      transition:opacity .2s ease, background .25s ease;
+    }
+    .nav-pills a:hover{ opacity:1; background:rgba(255,255,255,.03) }
+
+    /* шапкова кнопка — компактна */
     .btn{
-      appearance:none;width:auto;display:inline-flex;align-items:center;justify-content:center;
-      gap:8px;color:#FFFBEF;border:1px solid var(--line);border-radius:12px;
-      padding:14px 16px;cursor:pointer;font-family:var(--display-font);font-weight:700;
-      background:radial-gradient(circle at 50% 120%,rgba(255,255,255,0.15) 0%,rgba(24,23,18,0.9) 80%);
-      transition:.25s;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 1px 1px rgba(0,0,0,.35);
+      appearance:none; width:auto;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      color:var(--text-primary); border:1px solid var(--line);
+      border-radius:12px; padding:12px 16px; cursor:pointer;
+      font-family:var(--display-font); font-weight:700; letter-spacing:.02em;
+      background:radial-gradient(circle at 50% 120%, rgba(255,255,255,0.15) 0%, rgba(24,23,18,0.9) 80%);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03), 0 1px 1px rgba(0,0,0,.35);
+      transition:transform .08s ease, box-shadow .25s ease, background .25s ease;
+      text-decoration:none;
     }
-    .btn:hover{background:radial-gradient(circle at 50% 110%,rgba(30,29,24,0.25) 0%,rgba(24,23,18,0.95) 75%)}
-    .wrap{max-width:1100px;margin:28px auto;padding:0 16px;display:grid;gap:20px}
+    .btn:hover{
+      background:radial-gradient(circle at 50% 110%, rgba(30,29,24,0.25) 0%, rgba(24,23,18,0.95) 75%);
+      box-shadow:0 2px 8px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.05);
+    }
+    .btn:active{ transform: translateY(1px) }
+
+    /* ===== LAYOUT ===== */
+    .wrap{
+      max-width:1100px; margin:20px auto; padding:0 16px;
+      display:grid; gap:20px; grid-template-columns:1fr;
+    }
+    @media(min-width:1100px){
+      .wrap{ grid-template-columns:1.2fr .9fr }
+    }
+
+    /* ===== STAGE / CANVAS ===== */
     .stage{
-      position:relative;background:#0f0f0e;border:1px solid var(--line);border-radius:16px;padding:16px;
-      display:flex;align-items:center;justify-content:center;
+      position:relative;
+      background:#0f0f0e;
+      border:1px solid var(--line);
+      border-radius:16px; padding:16px;
+      box-shadow:0 30px 80px rgba(0,0,0,.55);
+      display:flex; align-items:center; justify-content:center;
+      min-height: 420px; /* не гігантське, але приємне */
     }
-    canvas{width:86%;background:#0f0f0e;border:1px dashed rgba(255,255,255,.08);border-radius:12px;cursor:grab}
-    .panel{background:rgba(27,26,20,.96);border:1px solid var(--line);border-radius:16px;padding:14px}
-    .panel .btn,.bar .btn{width:100%}
-    .title{font-weight:700;font-size:22px;background:linear-gradient(180deg,#fffbed,#bfb7ab);
-      -webkit-background-clip:text;color:transparent;}
-    .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
-    .thumb{background:#1f1e1a;border:1px solid var(--line);border-radius:12px;min-height:78px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .thumb.active{border-color:#fffbe6;box-shadow:0 0 0 2px rgba(255,255,255,.25) inset,0 0 22px rgba(255,255,255,.15)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-    label{color:var(--text-secondary);font-size:12px}
-    input[type="range"]{width:100%;accent-color:#FFFBEF}
-    .bar{display:flex;gap:10px;justify-content:space-between;margin-top:14px}
+    .stage::before{content:"";position:absolute;inset:10px;border:1px solid rgba(255,255,255,.06);border-radius:12px;pointer-events:none}
+    .stage::after{content:"";position:absolute;inset:16px;border:1px dashed rgba(255,255,255,.06);border-radius:10px;pointer-events:none}
+
+    canvas#c{
+      width:86%;
+      max-width: 900px;
+      background:#0f0f0e; border:1px dashed rgba(255,255,255,.08); border-radius:12px;
+      display:block; cursor:grab; touch-action:none;
+    }
+
+    /* ===== PANELS ===== */
+    .panel{
+      background:linear-gradient(180deg, rgba(27,26,20,.96), rgba(24,23,18,.94));
+      border:1px solid var(--line); border-radius:16px; padding:14px;
+      box-shadow:0 8px 22px rgba(0,0,0,.35);
+    }
+    .panel + .panel{ margin-top:10px }
+    .title{
+      display:flex; align-items:center; gap:10px;
+      font-family:var(--display-font);
+      font-weight:700; font-size:20px; letter-spacing:.01em;
+      background:linear-gradient(180deg,#fffbed,#bfb7ab);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .muted{ color:var(--text-secondary); font-size:12px; font-family: var(--ui-font); margin:8px 0 12px }
+
+    /* кнопки в панелях — на всю ширину */
+    .panel .btn, .bar .btn{ width:100%; }
+
+    /* повзунки без оранжевого */
+    input[type="range"]{
+      -webkit-appearance:none; width:100%;
+      height:5px; background:rgba(255,255,255,.10); border-radius:5px; outline:none;
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+      background:#dcd7c5; box-shadow:0 0 6px rgba(255,255,255,.25); cursor:pointer;
+    }
+    input[type="range"]::-moz-range-thumb{ width:14px; height:14px; border-radius:50%; background:#dcd7c5; cursor:pointer }
+
+    .thumbs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px }
+    .thumb{
+      background:#1f1e1a; border:1px solid var(--line); border-radius:12px;
+      min-height:78px; display:flex; align-items:center; justify-content:center;
+      cursor:pointer; transition:border-color .25s, box-shadow .25s, background .25s;
+    }
+    .thumb img{ max-width:88%; object-fit:contain }
+    .thumb:hover{ border-color:#dcd7c5; box-shadow:0 0 0 2px rgba(255,255,255,.15) inset, 0 0 16px rgba(255,255,255,.10) }
+    .thumb.active{ border-color:#fffbe6; box-shadow:0 0 0 2px rgba(255,255,255,.25) inset, 0 0 22px rgba(255,255,255,.15) }
+
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px }
+    label{ display:block; margin:6px 0; color:var(--text-secondary); font-size:12px; font-family: var(--ui-font) }
+
+    .bar{ display:flex; gap:10px; justify-content:space-between; margin-top:14px }
   </style>
 </head>
 <body>
-  <header class="topbar">
+  <!-- TOP BAR -->
+  <header class="topbar" aria-label="Bulk navigation">
     <div class="topbar-inner">
       <a class="brand" href="#"><img src="items/bulk-logo.png" alt="Bulk logo"/></a>
-      <nav class="nav-pills">
-        <a href="https://alphadocs.bulk.trade/" target="_blank">Docs</a>
-        <a href="https://t.me/tradebulk" target="_blank">Community</a>
-        <a href="https://www.bulk.trade/articles" target="_blank">Articles</a>
+      <nav class="nav-pills" aria-label="Primary">
+        <a href="https://alphadocs.bulk.trade/" target="_blank" rel="noopener">Docs</a>
+        <a href="https://t.me/tradebulk" target="_blank" rel="noopener">Community</a>
+        <a href="https://www.bulk.trade/articles" target="_blank" rel="noopener">Articles</a>
       </nav>
-      <a class="btn" href="https://discord.gg/bulk" target="_blank">Join Discord</a>
+      <a class="btn" href="https://discord.gg/bulk" target="_blank" rel="noopener">Join Discord</a>
     </div>
   </header>
 
   <main class="wrap">
-    <section class="stage"><canvas id="c" width="900" height="900"></canvas></section>
+    <!-- Preview -->
+    <section class="stage" aria-label="Preview Stage">
+      <canvas id="c" width="900" height="900"></canvas>
+    </section>
 
+    <!-- Controls -->
     <section>
       <div class="panel">
         <div class="title">Upload PFP</div>
-        <p style="color:#C6B6BA;font-size:12px;margin:8px 0 12px;">PNG / JPG / WEBP — processed locally in your browser.</p>
+        <p class="muted">PNG / JPG / WEBP — processed locally in your browser.</p>
         <input id="photo" type="file" accept="image/png,image/jpeg,image/webp" style="display:none"/>
         <button id="pickPhoto" class="btn">⬆ Select Image</button>
       </div>
@@ -94,22 +184,33 @@
       <div class="panel">
         <div class="title">Select Item</div>
         <div class="thumbs" id="thumbs">
-          <button class="thumb" data-mask="cap1"><img src="items/cap-a.png"></button>
-          <button class="thumb" data-mask="cap2"><img src="items/cap-b.png"></button>
-          <button class="thumb" data-mask="bucket"><img src="items/bucket-hat.png"></button>
+          <button class="thumb" data-mask="cap1" title="Cap A"><img src="items/cap-a.png" alt="Cap A"></button>
+          <button class="thumb" data-mask="cap2" title="Cap B"><img src="items/cap-b.png" alt="Cap B"></button>
+          <button class="thumb" data-mask="bucket" title="Bucket Hat"><img src="items/bucket-hat.png" alt="Bucket Hat"></button>
         </div>
 
         <div class="row">
-          <div><label>Scale</label><input id="scale" type="range" min="0.2" max="3" value="1" step="0.01"></div>
-          <div><label>Rotate (°)</label><input id="rotate" type="range" min="-180" max="180" value="0" step="1"></div>
+          <div>
+            <label for="scale">Scale</label>
+            <input id="scale" type="range" min="0.2" max="3" value="1" step="0.01">
+          </div>
+          <div>
+            <label for="rotate">Rotate (°)</label>
+            <input id="rotate" type="range" min="-180" max="180" value="0" step="1">
+          </div>
         </div>
+
         <div class="row">
-          <div><label>Opacity</label><input id="opacity" type="range" min="0" max="1" value="1" step="0.01"></div>
-          <div><label>Export Size</label>
+          <div>
+            <label for="opacity">Opacity</label>
+            <input id="opacity" type="range" min="0" max="1" value="1" step="0.01">
+          </div>
+          <div>
+            <label for="exportSize">Export Size</label>
             <select id="exportSize">
               <option value="orig">Original</option>
-              <option value="512">512×512</option>
-              <option value="1024">1024×1024</option>
+              <option value="512">512 × 512</option>
+              <option value="1024">1024 × 1024</option>
             </select>
           </div>
         </div>
@@ -123,68 +224,192 @@
   </main>
 
   <script>
-    const c=document.getElementById('c'),ctx=c.getContext('2d');
-    const photo=document.getElementById('photo'),pick=document.getElementById('pickPhoto'),
-          thumbs=document.getElementById('thumbs'),scale=document.getElementById('scale'),
-          rotate=document.getElementById('rotate'),opacity=document.getElementById('opacity'),
-          sizeSel=document.getElementById('exportSize'),reset=document.getElementById('reset'),
-          dl=document.getElementById('download');
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
 
-    const state={bgImg:null,capImg:null,cap:{x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1}};
-    const items={cap1:'items/cap-a.png',cap2:'items/cap-b.png',bucket:'items/bucket-hat.png'};
-    const loaded={}; for(const [k,v] of Object.entries(items)){const i=new Image();i.src=v;loaded[k]=i;}
+    const photoInput   = document.getElementById('photo');
+    const pickPhotoBtn = document.getElementById('pickPhoto');
+    const thumbs       = document.getElementById('thumbs');
+    const scaleInput   = document.getElementById('scale');
+    const rotateInput  = document.getElementById('rotate');
+    const opacityInput = document.getElementById('opacity');
+    const exportSizeSel= document.getElementById('exportSize');
+    const resetBtn     = document.getElementById('reset');
+    const dlBtn        = document.getElementById('download');
+
+    const state = { bgImg:null, capImg:null, cap:{x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1} };
+
+    const itemPaths = {
+      cap1:'items/cap-a.png',
+      cap2:'items/cap-b.png',
+      bucket:'items/bucket-hat.png'
+    };
+    const presets = {};
+    Object.entries(itemPaths).forEach(([k,src])=>{
+      const i=new Image(); i.src=src; presets[k]=i;
+    });
+
+    function loadImageFromFile(file){
+      return new Promise((resolve,reject)=>{
+        const r=new FileReader();
+        r.onload=()=>{ const img=new Image(); img.onload=()=>resolve(img); img.onerror=()=>reject(new Error('decode failed')); img.src=r.result; };
+        r.onerror=()=>reject(new Error('read failed'));
+        r.readAsDataURL(file);
+      });
+    }
+
+    function fitCanvasToImage(img){
+      const MAX=1400;
+      const w=img.naturalWidth, h=img.naturalHeight;
+      const k=Math.min(1, MAX/Math.max(w,h));
+      canvas.width=Math.round(w*k);
+      canvas.height=Math.round(h*k);
+    }
+
+    function centerCap(imgLike){
+      const iw=imgLike.width||imgLike.naturalWidth;
+      const ih=imgLike.height||imgLike.naturalHeight;
+      state.cap.w=iw; state.cap.h=ih;
+      state.cap.scale=Math.min(1, (canvas.width/iw)*0.5);
+      state.cap.rot=0;
+      state.cap.alpha=parseFloat(opacityInput.value||'1');
+      state.cap.x=canvas.width/2-(iw*state.cap.scale)/2;
+      state.cap.y=canvas.height*0.2;
+
+      scaleInput.value=String(state.cap.scale);
+      rotateInput.value=String(state.cap.rot);
+    }
 
     function render(){
-      ctx.clearRect(0,0,c.width,c.height);
-      if(state.bgImg) ctx.drawImage(state.bgImg,0,0,c.width,c.height);
-      else{ctx.fillStyle='#0f0f0e';ctx.fillRect(0,0,c.width,c.height);}
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      if(state.bgImg) ctx.drawImage(state.bgImg,0,0,canvas.width,canvas.height);
+      else { ctx.fillStyle='#0f0f0e'; ctx.fillRect(0,0,canvas.width,canvas.height); }
+
       if(state.capImg){
-        const{x,y,w,h,scale,rot,alpha}=state.cap, cw=w*scale,ch=h*scale,cx=x+cw/2,cy=y+ch/2;
-        ctx.save();ctx.translate(cx,cy);ctx.rotate(rot*Math.PI/180);ctx.globalAlpha=alpha;
-        ctx.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);ctx.restore();ctx.globalAlpha=1;
+        const {x,y,w,h,scale,rot,alpha}=state.cap;
+        const cw=w*scale, ch=h*scale, cx=x+cw/2, cy=y+ch/2;
+        ctx.save();
+        ctx.translate(cx,cy);
+        ctx.rotate(rot*Math.PI/180);
+        ctx.globalAlpha=alpha;
+        ctx.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);
+        ctx.restore();
+        ctx.globalAlpha=1;
       }
     }
 
-    function fitCanvas(img){const MAX=1400;const w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,MAX/Math.max(w,h));c.width=w*k;c.height=h*k;}
-    function centerCap(img){const iw=img.naturalWidth,ih=img.naturalHeight;state.cap.w=iw;state.cap.h=ih;state.cap.scale=Math.min(1,(c.width/iw)*0.5);state.cap.x=c.width/2-(iw*state.cap.scale)/2;state.cap.y=c.height*0.2;scale.value=state.cap.scale;}
+    // Upload PFP
+    pickPhotoBtn.addEventListener('click', ()=> photoInput.click());
+    photoInput.addEventListener('change', async ()=>{
+      const f=photoInput.files?.[0]; if(!f) return;
+      try{
+        const img=await loadImageFromFile(f);
+        state.bgImg=img;
+        fitCanvasToImage(img);
+        render();
+      }catch(e){ alert('Please upload PNG, JPG, or WebP.'); }
+    });
 
-    pick.onclick=()=>photo.click();
-    photo.onchange=async()=>{const f=photo.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{state.bgImg=i;fitCanvas(i);render();};i.src=r.result;};r.readAsDataURL(f);};
+    // Select item
+    thumbs.addEventListener('click', e=>{
+      const box=e.target.closest('.thumb'); if(!box) return;
+      const key=box.getAttribute('data-mask'); if(!key) return;
+      state.capImg = presets[key];
+      if(state.capImg.complete && (state.capImg.naturalWidth>0)){
+        centerCap(state.capImg);
+        render();
+      }else{
+        state.capImg.onload=()=>{ centerCap(state.capImg); render(); };
+      }
+      document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+      box.classList.add('active');
+    });
 
-    thumbs.onclick=e=>{const b=e.target.closest('.thumb');if(!b)return;state.capImg=loaded[b.dataset.mask];centerCap(state.capImg);document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));b.classList.add('active');render();};
+    // Drag to move cap
+    function canvasPoint(e){
+      const r=canvas.getBoundingClientRect();
+      const cx=(e.touches?.[0]?.clientX ?? e.clientX);
+      const cy=(e.touches?.[0]?.clientY ?? e.clientY);
+      return { x:(cx-r.left)*(canvas.width/r.width), y:(cy-r.top)*(canvas.height/r.height) };
+    }
+    function hitCap(mx,my){
+      if(!state.capImg) return false;
+      const {x,y,w,h,scale,rot}=state.cap;
+      const cw=w*scale, ch=h*scale, cx=x+cw/2, cy=y+ch/2;
+      const dx=mx-cx, dy=my-cy, ang=-rot*Math.PI/180;
+      const rx=dx*Math.cos(ang)-dy*Math.sin(ang);
+      const ry=dx*Math.sin(ang)+dy*Math.cos(ang);
+      return (rx>=-cw/2 && rx<=cw/2 && ry>=-ch/2 && ry<=ch/2);
+    }
+    let dragging=false, dragOff={x:0,y:0};
+    function onDown(e){
+      if(!state.capImg) return;
+      const {x,y}=canvasPoint(e);
+      if(hitCap(x,y)){
+        dragging=true;
+        dragOff.x=x-state.cap.x; dragOff.y=y-state.cap.y;
+        canvas.style.cursor='grabbing';
+        e.preventDefault();
+      }
+    }
+    function onMove(e){
+      if(!dragging){
+        const p=canvasPoint(e);
+        canvas.style.cursor = hitCap(p.x,p.y) ? 'grab' : 'default';
+        return;
+      }
+      const {x,y}=canvasPoint(e);
+      state.cap.x = x - dragOff.x;
+      state.cap.y = y - dragOff.y;
+      render();
+    }
+    function onUp(){ dragging=false; canvas.style.cursor='default'; }
+    canvas.addEventListener('mousedown',onDown);
+    window.addEventListener('mousemove',onMove);
+    window.addEventListener('mouseup',onUp);
+    canvas.addEventListener('touchstart',onDown,{passive:false});
+    window.addEventListener('touchmove',onMove,{passive:false});
+    window.addEventListener('touchend',onUp);
 
-    scale.oninput=()=>{state.cap.scale=parseFloat(scale.value);render();};
-    rotate.oninput=()=>{state.cap.rot=parseFloat(rotate.value);render();};
-    opacity.oninput=()=>{state.cap.alpha=parseFloat(opacity.value);render();};
+    // Controls
+    scaleInput.addEventListener('input', ()=>{ state.cap.scale=parseFloat(scaleInput.value||'1'); render(); });
+    rotateInput.addEventListener('input', ()=>{ state.cap.rot=parseFloat(rotateInput.value||'0'); render(); });
+    opacityInput.addEventListener('input', ()=>{ state.cap.alpha=parseFloat(opacityInput.value||'1'); render(); });
 
-    // 🟢 Reset: тільки кепка
-    reset.onclick=()=>{
+    // Reset (тільки кепка)
+    resetBtn.addEventListener('click', ()=>{
       state.capImg=null;
       state.cap={x:0,y:0,w:0,h:0,scale:1,rot:0,alpha:1};
-      scale.value="1";rotate.value="0";opacity.value="1";
+      scaleInput.value="1"; rotateInput.value="0"; opacityInput.value="1";
       document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
       render();
-    };
+    });
 
-    // 🟢 Drag кепки
-    let drag=false,off={x:0,y:0};
-    const point=e=>{const r=c.getBoundingClientRect();const x=(e.touches?.[0]?.clientX??e.clientX)-r.left;const y=(e.touches?.[0]?.clientY??e.clientY)-r.top;return{x:x*(c.width/r.width),y:y*(c.height/r.height)};}
-    const hit=(mx,my)=>{if(!state.capImg)return false;const{x,y,w,h,scale,rot}=state.cap;const cw=w*scale,ch=h*scale,cx=x+cw/2,cy=y+ch/2;const dx=mx-cx,dy=my-cy,ang=-rot*Math.PI/180;const rx=dx*Math.cos(ang)-dy*Math.sin(ang);const ry=dx*Math.sin(ang)+dy*Math.cos(ang);return(rx>=-cw/2&&rx<=cw/2&&ry>=-ch/2&&ry<=ch/2);}
-    function down(e){if(!state.capImg)return;const p=point(e);if(hit(p.x,p.y)){drag=true;off.x=p.x-state.cap.x;off.y=p.y-state.cap.y;c.style.cursor='grabbing';e.preventDefault();}}
-    function move(e){if(!drag){const p=point(e);c.style.cursor=hit(p.x,p.y)?'grab':'default';return;}const p=point(e);state.cap.x=p.x-off.x;state.cap.y=p.y-off.y;render();}
-    function up(){drag=false;c.style.cursor='default';}
-    c.addEventListener('mousedown',down);window.addEventListener('mousemove',move);window.addEventListener('mouseup',up);
-    c.addEventListener('touchstart',down,{passive:false});window.addEventListener('touchmove',move,{passive:false});window.addEventListener('touchend',up);
-
-    // 🟢 Download + перехід
-    function exportAndOpen(size){
-      const o=document.createElement('canvas');const g=o.getContext('2d');
-      if(size==='orig'){o.width=c.width;o.height=c.height;}else{const s=parseInt(size);o.width=s;o.height=s;}
-      if(state.bgImg)g.drawImage(state.bgImg,0,0,o.width,o.height);else{g.fillStyle='#0f0f0e';g.fillRect(0,0,o.width,o.height);}
-      if(state.capImg){const k=Math.min(o.width/c.width,o.height/c.height);const{x,y,w,h,scale,rot,alpha}=state.cap;const cw=w*scale*k,ch=h*scale*k,cx=(x*k)+cw/2,cy=(y*k)+ch/2;g.save();g.translate(cx,cy);g.rotate(rot*Math.PI/180);g.globalAlpha=alpha;g.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);g.restore();}
-      const data=o.toDataURL('image/png');const a=document.createElement('a');a.download='pfp.png';a.href=data;a.click();try{sessionStorage.setItem('bulk_pfp',data);}catch(e){console.warn(e);}setTimeout(()=>{window.location.href='ready.html';},200);
+    // Download → ready.html (через sessionStorage)
+    function exportPNGAndOpenReady(size){
+      const off=document.createElement('canvas'); const g=off.getContext('2d');
+      if(size==='orig'){ off.width=canvas.width; off.height=canvas.height; }
+      else { const s=parseInt(size,10); off.width=s; off.height=s; }
+      if(state.bgImg) g.drawImage(state.bgImg,0,0,off.width,off.height);
+      else { g.fillStyle='#0f0f0e'; g.fillRect(0,0,off.width,off.height); }
+      if(state.capImg){
+        const k=Math.min(off.width/canvas.width, off.height/canvas.height);
+        const {x,y,w,h,scale,rot,alpha}=state.cap;
+        const cw=w*scale*k, ch=h*scale*k;
+        const cx=(x*k)+cw/2, cy=(y*k)+ch/2;
+        g.save(); g.translate(cx,cy); g.rotate(rot*Math.PI/180); g.globalAlpha=alpha;
+        g.drawImage(state.capImg,-cw/2,-ch/2,cw,ch);
+        g.restore(); g.globalAlpha=1;
+      }
+      const dataURL=off.toDataURL('image/png');
+      const a=document.createElement('a'); a.download='pfp.png'; a.href=dataURL; a.click();
+      try{ sessionStorage.setItem('bulk_pfp', dataURL); }catch(e){ console.warn('sessionStorage issue', e); }
+      setTimeout(()=>{ window.location.href='ready.html'; }, 200);
     }
-    dl.onclick=()=>{exportAndOpen(sizeSel.value);}
+    dlBtn.addEventListener('click', ()=>{ exportPNGAndOpenReady(exportSizeSel.value); });
+
+    // init
+    (function(){ ctx.clearRect(0,0,canvas.width,canvas.height); })();
   </script>
 </body>
 </html>
